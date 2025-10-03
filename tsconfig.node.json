@@ -4,7 +4,7 @@
     "target": "ES2023",
     "lib": ["ES2023"],
     "module": "ESNext",
-    "types": [],
+    "types": ["node"],          // if you need Node types
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -12,15 +12,18 @@
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
 
-    /* Linting */
+    /* Linting / Strict */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+
+    /* Project reference requirements */
+    "composite": true,           // REQUIRED
+    "outDir": "./dist",          // Optional           // Must allow emitting
   },
   "include": ["vite.config.ts"]
 }

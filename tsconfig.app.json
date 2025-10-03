@@ -5,18 +5,23 @@
     "useDefineForClassFields": true,
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "node"],  // add "node" if you use process/env
     "skipLibCheck": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
-    "noEmit": true,
+
+    /* Project reference requirements */
+    "composite": true,       // REQUIRED
+    "noEmit": false,         // Must allow emitting for composite projects
+    "outDir": "./dist",      // Optional, where compiled files go
+
+    /* JSX */
     "jsx": "react-jsx",
 
-    /* Linting */
+    /* Linting / strict */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
