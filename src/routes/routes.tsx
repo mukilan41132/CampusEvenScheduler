@@ -18,7 +18,7 @@ export const routesConfig: AppRoute[] = [
     element: <CreateStudent />,
   },
   {
-    path: "/managestudent",
+    path: "/manage-students",
     element: <ManageStudent />,
   },
 ];

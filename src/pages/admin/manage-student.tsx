@@ -3,6 +3,8 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import HttpAxios from "../../utils/axiosInstance"; // adjust path
+import CustomButton from "../../components/Button/CustomButton";
+import { useNavigate } from "react-router-dom";
 
 interface Student {
   id: string;
@@ -17,7 +19,7 @@ interface Student {
 const ManageStudent: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
-
+    const navigate = useNavigate();
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -69,15 +71,18 @@ const ManageStudent: React.FC = () => {
 
   return (
     <div className="card">
-      <h3>Manage Students</h3>
+      <div>
+        <h3>Manage Students </h3>
+        <CustomButton text={"Create Students"} onClick={() => {}} />
+      </div>
+
       <DataTable
         value={students}
         paginator
         rows={5}
         loading={loading}
         stripedRows
-        responsiveLayout="scroll"
-      >
+        responsiveLayout="scroll">
         <Column field="name" header="Name" sortable />
         <Column field="email" header="Email" sortable />
         <Column field="gender" header="Gender" sortable />
