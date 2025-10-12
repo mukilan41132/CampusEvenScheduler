@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
-import HttpAxios from "../../utils/axiosInstance"; // adjust path
+import HttpAxios from "../../utils/axiosInstance";
 import CustomButton from "../../components/Button/CustomButton";
 import { useNavigate } from "react-router-dom";
 
@@ -19,7 +19,7 @@ interface Student {
 const ManageStudent: React.FC = () => {
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -27,7 +27,7 @@ const ManageStudent: React.FC = () => {
   const fetchStudents = async () => {
     try {
       setLoading(true);
-      const res = await HttpAxios.axios().get("/Student/all"); // API endpoint
+      const res = await HttpAxios.axios().get("/Student/all");
       setStudents(res.data);
     } catch (err) {
       console.error("Error fetching students:", err);
@@ -57,7 +57,6 @@ const ManageStudent: React.FC = () => {
 
   const handleEdit = (student: Student) => {
     console.log("Edit student", student);
-    // open dialog / navigate to edit page
   };
 
   const handleDelete = async (id: string) => {
@@ -71,9 +70,14 @@ const ManageStudent: React.FC = () => {
 
   return (
     <div className="card">
-      <div>
+      <div className="header-btn">
         <h3>Manage Students </h3>
-        <CustomButton text={"Create Students"} onClick={() => {}} />
+        <CustomButton
+          text={"Create Students"}
+          onClick={() => {
+            navigate("/createstudent");
+          }}
+        />
       </div>
 
       <DataTable
@@ -82,7 +86,8 @@ const ManageStudent: React.FC = () => {
         rows={5}
         loading={loading}
         stripedRows
-        responsiveLayout="scroll">
+        responsiveLayout="scroll"
+      >
         <Column field="name" header="Name" sortable />
         <Column field="email" header="Email" sortable />
         <Column field="gender" header="Gender" sortable />
