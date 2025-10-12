@@ -4,7 +4,7 @@ import { Column } from "primereact/column";
 import { Button } from "primereact/button";
 import HttpAxios from "../../utils/axiosInstance";
 import CustomButton from "../../components/Button/CustomButton";
-import { useNavigate } from "react-router-dom";
+import CreateStudent from "./create-student";
 
 interface Student {
   id: string;
@@ -15,11 +15,103 @@ interface Student {
   department: string;
   rollNo: string;
 }
-
+const studentsdata: Student[] = [
+  {
+    id: "1",
+    name: "Alice Johnson",
+    email: "alice.johnson@example.com",
+    gender: "Female",
+    age: "20",
+    department: "Computer Science",
+    rollNo: "CS101",
+  },
+  {
+    id: "2",
+    name: "Bob Smith",
+    email: "bob.smith@example.com",
+    gender: "Male",
+    age: "21",
+    department: "Mechanical Engineering",
+    rollNo: "ME102",
+  },
+  {
+    id: "3",
+    name: "Charlie Brown",
+    email: "charlie.brown@example.com",
+    gender: "Male",
+    age: "22",
+    department: "Electrical Engineering",
+    rollNo: "EE103",
+  },
+  {
+    id: "4",
+    name: "Diana Prince",
+    email: "diana.prince@example.com",
+    gender: "Female",
+    age: "20",
+    department: "Civil Engineering",
+    rollNo: "CE104",
+  },
+  {
+    id: "5",
+    name: "Ethan Hunt",
+    email: "ethan.hunt@example.com",
+    gender: "Male",
+    age: "23",
+    department: "Computer Science",
+    rollNo: "CS105",
+  },
+  {
+    id: "6",
+    name: "Fiona Gallagher",
+    email: "fiona.gallagher@example.com",
+    gender: "Female",
+    age: "21",
+    department: "Mechanical Engineering",
+    rollNo: "ME106",
+  },
+  {
+    id: "7",
+    name: "George Martin",
+    email: "george.martin@example.com",
+    gender: "Male",
+    age: "22",
+    department: "Electrical Engineering",
+    rollNo: "EE107",
+  },
+  {
+    id: "8",
+    name: "Hannah Baker",
+    email: "hannah.baker@example.com",
+    gender: "Female",
+    age: "20",
+    department: "Civil Engineering",
+    rollNo: "CE108",
+  },
+  {
+    id: "9",
+    name: "Ian Somerhalder",
+    email: "ian.somerhalder@example.com",
+    gender: "Male",
+    age: "23",
+    department: "Computer Science",
+    rollNo: "CS109",
+  },
+  {
+    id: "10",
+    name: "Julia Roberts",
+    email: "julia.roberts@example.com",
+    gender: "Female",
+    age: "21",
+    department: "Mechanical Engineering",
+    rollNo: "ME110",
+  },
+];
 const ManageStudent: React.FC = () => {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [students, setStudents] = useState<Student[]>(studentsdata);
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [visible, setVisible] = useState(false);
+
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -41,12 +133,17 @@ const ManageStudent: React.FC = () => {
       <div className="flex gap-2">
         <Button
           label="Edit"
+          size="small"
           icon="pi pi-pencil"
           className="p-button-sm p-button-warning"
-          onClick={() => handleEdit(rowData)}
+          onClick={() => {
+            handleEdit(rowData);
+         
+          }}
         />
         <Button
           label="Delete"
+          size="small"
           icon="pi pi-trash"
           className="p-button-sm p-button-danger"
           onClick={() => handleDelete(rowData.id)}
@@ -56,6 +153,7 @@ const ManageStudent: React.FC = () => {
   };
 
   const handleEdit = (student: Student) => {
+       setVisible(true);
     console.log("Edit student", student);
   };
 
@@ -75,18 +173,20 @@ const ManageStudent: React.FC = () => {
         <CustomButton
           text={"Create Students"}
           onClick={() => {
-            navigate("/createstudent");
+            setVisible(true);
           }}
         />
       </div>
 
       <DataTable
         value={students}
-        paginator
         rows={5}
         loading={loading}
         stripedRows
+        size="small"
         responsiveLayout="scroll"
+        paginator
+        rowsPerPageOptions={[5, 10, 25, 50]}
       >
         <Column field="name" header="Name" sortable />
         <Column field="email" header="Email" sortable />
@@ -96,6 +196,7 @@ const ManageStudent: React.FC = () => {
         <Column field="rollNo" header="Roll No" sortable />
         <Column header="Actions" body={actionBodyTemplate} />
       </DataTable>
+      <CreateStudent visible={visible} setVisible={setVisible} />
     </div>
   );
 };

@@ -5,6 +5,7 @@ import CustomButton from "../../components/Button/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { registerStudent } from "../../slices/create-student/studentSlice";
+import { Dialog } from "primereact/dialog";
 
 interface Student {
   name: string;
@@ -14,7 +15,15 @@ interface Student {
   department: string;
   rollNo: string;
 }
-const CreateStudent = () => {
+interface CreateStudentProps {
+  visible: boolean;
+  setVisible: (value: boolean) => void;
+}
+
+const CreateStudent: React.FC<CreateStudentProps> = ({
+  visible,
+  setVisible,
+}) => {
   const dispatch = useDispatch<AppDispatch>();
   const records = useSelector((state: any) => state?.students);
   const [createstudents, setCreatestudent] = useState<Student>({
@@ -30,7 +39,15 @@ const CreateStudent = () => {
   };
   return (
     <>
-      <div>
+      <Dialog
+        visible={visible}
+        modal
+        style={{ width: "50rem" }}
+        onHide={() => {
+          if (!visible) return;
+          setVisible(false);
+        }}
+      >
         <h4>Student Register</h4>
         {records.loading && <h4>loading...</h4>}
 
@@ -90,7 +107,7 @@ const CreateStudent = () => {
             text={"Register"}
           />
         </footer>
-      </div>
+      </Dialog>
     </>
   );
 };
