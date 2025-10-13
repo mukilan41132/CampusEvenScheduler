@@ -6,11 +6,17 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { registerStudent } from "../../slices/create-student/studentSlice";
 import { Dialog } from "primereact/dialog";
+import { Avatar } from "primereact/avatar";
+import Autocomplete from "@mui/material/Autocomplete";
+import { TextField } from "@mui/material";
 
 interface Student {
   name: string;
   email: string;
+  phoneNo: string;
   gender: string;
+  yearOfStudy: string;
+  semester: string;
   age: string;
   department: string;
   rollNo: string;
@@ -19,6 +25,61 @@ interface CreateStudentProps {
   visible: boolean;
   setVisible: (value: boolean) => void;
 }
+const departments = [
+  "Computer Science Engineering",
+  "Information Technology",
+  "Electronics and Communication Engineering",
+  "Electrical and Electronics Engineering",
+  "Mechanical Engineering",
+  "Civil Engineering",
+  "Automobile Engineering",
+  "Chemical Engineering",
+  "Biomedical Engineering",
+  "Aerospace Engineering",
+
+  "Physics",
+  "Chemistry",
+  "Mathematics",
+  "Biotechnology",
+  "Microbiology",
+  "Environmental Science",
+
+  "Commerce",
+  "Accounting and Finance",
+  "Business Administration",
+  "Economics",
+  "Banking and Insurance",
+  "Management Studies",
+
+  "English",
+  "History",
+  "Political Science",
+  "Sociology",
+  "Psychology",
+  "Philosophy",
+  "Public Administration",
+
+  "Computer Applications (BCA/MCA)",
+  "Data Science",
+  "Artificial Intelligence",
+  "Cyber Security",
+  "Medicine",
+  "Nursing",
+  "Pharmacy",
+  "Physiotherapy",
+  "Public Health",
+  "Education (B.Ed/M.Ed)",
+  "Law (LLB/LLM)",
+  "Social Work",
+  "Agriculture",
+  "Horticulture",
+  "Forestry",
+  "Fisheries Science",
+  "Architecture",
+  "Interior Design",
+  "Fashion Design",
+  "Graphic Design",
+];
 
 const CreateStudent: React.FC<CreateStudentProps> = ({
   visible,
@@ -29,6 +90,9 @@ const CreateStudent: React.FC<CreateStudentProps> = ({
   const [createstudents, setCreatestudent] = useState<Student>({
     name: "",
     email: "",
+    phoneNo: "",
+    yearOfStudy: "",
+    semester: "",
     gender: "",
     age: "",
     department: "",
@@ -37,20 +101,45 @@ const CreateStudent: React.FC<CreateStudentProps> = ({
   const register = async () => {
     dispatch(registerStudent(createstudents));
   };
+  const footerContent = (
+    <div className="footer-btn">
+      <CustomButton
+        size="small"
+        color="primary"
+        onClick={() => register()}
+        type="submit"
+        text={"Cancel"}
+      />
+      <CustomButton
+        size="small"
+        onClick={() => register()}
+        color="secondary"
+        type="submit"
+        text={"Register"}
+      />
+    </div>
+  );
+  const headerElement = (
+    <div className="inline-flex align-items-center justify-content-center gap-2">
+      <Avatar
+        image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png"
+        shape="circle"
+      />
+      <span className="font-bold white-space-nowrap">Amy Elsner</span>
+    </div>
+  );
   return (
     <>
       <Dialog
         visible={visible}
         modal
+        header={headerElement}
+        footer={footerContent}
         style={{ width: "50rem" }}
         onHide={() => {
           if (!visible) return;
           setVisible(false);
-        }}
-      >
-        <h4>Student Register</h4>
-        {records.loading && <h4>loading...</h4>}
-
+        }}>
         <form className="students-container">
           <CustomTextField
             label={"Name"}
@@ -67,11 +156,21 @@ const CreateStudent: React.FC<CreateStudentProps> = ({
             }
           />
           <CustomTextField
-            label={"Gender"}
-            value={createstudents.gender}
+            label={"Contact No"}
+            value={createstudents.phoneNo}
             onChange={(e) =>
-              setCreatestudent({ ...createstudents, gender: e.target.value })
+              setCreatestudent({ ...createstudents, phoneNo: e.target.value })
             }
+          />
+          <Autocomplete
+            disablePortal
+            size="small"
+            options={["Male", "Female", "Other"]}
+            value={createstudents.gender || ""}
+            onChange={(_, value: any) =>
+              setCreatestudent({ ...createstudents, gender: value })
+            }
+            renderInput={(params) => <TextField {...params} label="Gender" />}
           />
 
           <CustomTextField
@@ -81,16 +180,17 @@ const CreateStudent: React.FC<CreateStudentProps> = ({
               setCreatestudent({ ...createstudents, age: e.target.value })
             }
           />
-
-          <CustomTextField
-            label={"Department"}
-            value={createstudents.department}
-            onChange={(e) =>
-              setCreatestudent({
-                ...createstudents,
-                department: e.target.value,
-              })
+          <Autocomplete
+            disablePortal
+            size="small"
+            options={departments}
+            value={createstudents.department || ""}
+            onChange={(_, value: any) =>
+              setCreatestudent({ ...createstudents, department: value })
             }
+            renderInput={(params) => (
+              <TextField {...params} label="Department" />
+            )}
           />
           <CustomTextField
             label={"RollNo"}
@@ -99,14 +199,24 @@ const CreateStudent: React.FC<CreateStudentProps> = ({
               setCreatestudent({ ...createstudents, rollNo: e.target.value })
             }
           />
-        </form>
-        <footer className="footer-btn">
-          <CustomButton
-            onClick={() => register()}
-            type="submit"
-            text={"Register"}
+          <CustomTextField
+            label={"Semester"}
+            value={createstudents.semester}
+            onChange={(e) =>
+              setCreatestudent({ ...createstudents, semester: e.target.value })
+            }
           />
-        </footer>
+          <CustomTextField
+            label={"YearOfStudy"}
+            value={createstudents.yearOfStudy}
+            onChange={(e) =>
+              setCreatestudent({
+                ...createstudents,
+                yearOfStudy: e.target.value,
+              })
+            }
+          />
+        </form>
       </Dialog>
     </>
   );

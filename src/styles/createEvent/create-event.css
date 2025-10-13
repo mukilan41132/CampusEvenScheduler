@@ -1,0 +1,23 @@
+ 
+
+.form-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.form-control {
+  flex: 1;
+}
+
+.btn-submit {
+  margin-top: 16px;
+  padding: 10px 20px;
+  font-weight: 500;
+}

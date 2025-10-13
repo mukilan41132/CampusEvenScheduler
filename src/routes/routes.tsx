@@ -1,6 +1,7 @@
-import CreateStudent from "../pages/admin/create-student";
 import Dashbord from "../pages/Dashbord/Dashbord";
 import ManageStudent from "../pages/admin/manage-student";
+ 
+import ManageEvents from "../pages/admin/manage-events";
 
 export interface AppRoute {
   path: string;
@@ -13,9 +14,10 @@ export const routesConfig: AppRoute[] = [
     path: "/dashboard",
     element: <Dashbord />,
   },
+
   {
-    path: "/createstudent",
-    element: <CreateStudent />,
+    path: "/manage-events",
+    element: <ManageEvents />,
   },
   {
     path: "/manage-students",

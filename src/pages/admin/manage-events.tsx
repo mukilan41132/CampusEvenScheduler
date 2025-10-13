@@ -8,6 +8,7 @@ import HttpAxios from "../../utils/axiosInstance";
 import CustomButton from "../../components/Button/CustomButton";
 import CreateStudent from "./create-student";
 import FilterListIcon from "@mui/icons-material/FilterList";
+import CreateEventForm from "./create-events";
 
 interface Student {
   id: string;
@@ -110,7 +111,7 @@ const studentsdata: Student[] = [
     rollNo: "ME110",
   },
 ];
-const ManageStudent: React.FC = () => {
+const ManageEvents: React.FC = () => {
   const [students, setStudents] = useState<Student[]>(studentsdata);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
@@ -172,7 +173,7 @@ const ManageStudent: React.FC = () => {
   return (
     <div className="card">
       <div className="header-btn">
-        <h3>Manage Students </h3>
+        <h3>Manage Events </h3>
         <div>
           <Tooltip title="Delete">
             <IconButton
@@ -184,7 +185,7 @@ const ManageStudent: React.FC = () => {
             </IconButton>
           </Tooltip>
           <CustomButton
-            text={"Create Students"}
+            text={"Create Events"}
             onClick={() => {
               setVisible(true);
             }}
@@ -209,9 +210,9 @@ const ManageStudent: React.FC = () => {
         <Column field="rollNo" header="Roll No" sortable />
         <Column header="Actions" body={actionBodyTemplate} />
       </DataTable>
-      <CreateStudent visible={visible} setVisible={setVisible} />
+      <CreateEventForm visible={visible} setVisible={setVisible} />
     </div>
   );
 };
 
-export default ManageStudent;
+export default ManageEvents;

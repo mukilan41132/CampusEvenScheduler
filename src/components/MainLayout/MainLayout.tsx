@@ -14,7 +14,7 @@ import {
   ListItemButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import routeMenus, { type RouteMenu } from "../../routes/routeMenus";
 
 const drawerWidth = 240;
@@ -30,8 +30,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   title = "Dashboard",
   role = "student",
 }) => {
+  const location = useLocation();
   const [open, setOpen] = React.useState(false);
-
+  const pathnames = location.pathname.split("/").filter(Boolean);
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -47,7 +48,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            {title}
+            {pathnames}
           </Typography>
           <Button color="inherit">Logout</Button>
         </Toolbar>
@@ -59,8 +60,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         onClose={toggleDrawer}
         sx={{
           "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
-        }}
-      >
+        }}>
         <Toolbar />
         <List>
           {menusForRole.map((menu) => (
@@ -68,8 +68,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
               <ListItemButton
                 component={Link}
                 to={menu.path}
-                onClick={toggleDrawer}
-              >
+                onClick={toggleDrawer}>
                 <ListItemText primary={menu.label} />
               </ListItemButton>
             </ListItem>

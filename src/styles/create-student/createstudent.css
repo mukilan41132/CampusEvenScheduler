@@ -1,13 +1,14 @@
 .students-container {
   display: grid;
   grid-template-columns: auto auto auto;
+  margin-top: 10px;
   gap: 10px;
 }
 
 .footer-btn {
-  padding: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .header-btn {
