@@ -1,17 +1,12 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  type PayloadAction,
-} from "@reduxjs/toolkit";
-import HttpAxios from "../../utils/axiosInstance";
- 
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { getAllStudents, registerStudent } from "./thunk";
 
 export interface Student {
   name: string;
   email: string;
   gender: string;
   age: string;
-  department: string; 
+  department: string;
   rollNo: string;
 }
 
@@ -26,21 +21,6 @@ export const initialState: StudentState = {
   error: null,
   students: [],
 };
-
-export const registerStudent = createAsyncThunk(
-  "students/register",
-  async (studentData: Student, { rejectWithValue }) => {
-    try {
-      const response = await HttpAxios.axios().post(
-        "/Student/student/register",
-        studentData
-      );
-      return response.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
 
 const studentSlice = createSlice({
   name: "students",
@@ -58,9 +38,9 @@ const studentSlice = createSlice({
       })
       .addCase(
         registerStudent.fulfilled,
-        (state, action: PayloadAction<Student>) => {
+        (state, _action: PayloadAction<Student>) => {
           state.loading = false;
-          state.students.push(action.payload);
+          state.students = [];
         }
       )
       .addCase(
@@ -69,7 +49,23 @@ const studentSlice = createSlice({
           state.loading = false;
           state.error = action.payload;
         }
-      );
+      )
+
+      .addCase(getAllStudents.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(
+        getAllStudents.fulfilled,
+        (state, action: PayloadAction<any>) => {
+          state.loading = false;
+          state.students = action.payload;
+        }
+      )
+      .addCase(getAllStudents.rejected, (state, action: PayloadAction<any>) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

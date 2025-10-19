@@ -4,11 +4,12 @@ import "../../styles/create-student/createstudent.css";
 import CustomButton from "../../components/Button/CustomButton";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../../store/store";
-import { registerStudent } from "../../slices/create-student/studentSlice";
+
 import { Dialog } from "primereact/dialog";
 import { Avatar } from "primereact/avatar";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
+import { registerStudent } from "../../slices/create-student/thunk";
 
 interface Student {
   name: string;

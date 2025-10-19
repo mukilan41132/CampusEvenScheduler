@@ -1,21 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../../styles/Auth/auth.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { loginAuth } from "../../slices/auth/thunk";
-const Authindex = () => {
 
+const Authindex = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
+  const Authdata = useSelector((state: any) => state.authlogin);
 
-  const Authdata = useSelector((state:any)=> state.authlogin);
-  console.log("Authdata",Authdata);
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -26,14 +25,22 @@ const Authindex = () => {
           password: password,
         };
         dispatch(loginAuth(auth));
-
-       // sessionStorage.setItem("token", "admin");
-       // navigate("/dashboard");
       } else {
         navigate("/");
       }
     } catch (error) {}
   };
+
+  useEffect(() => {
+    if (!Authdata) return;
+
+    if (Authdata?.auth?.token) {
+      sessionStorage.setItem("token", Authdata.auth.token);
+      navigate("/dashboard", { replace: true });
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, [Authdata?.auth?.token, navigate]);
 
   return (
     <div className="login-container">

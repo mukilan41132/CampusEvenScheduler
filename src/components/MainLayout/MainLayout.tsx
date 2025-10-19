@@ -14,8 +14,11 @@ import {
   ListItemButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import routeMenus, { type RouteMenu } from "../../routes/routeMenus";
+import { useDispatch, useSelector } from "react-redux";
+import type { AppDispatch } from "../../store/store";
+import { clearError } from "../../slices/auth/authSlice";
 
 const drawerWidth = 240;
 
@@ -31,12 +34,20 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   role = "student",
 }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(false);
   const pathnames = location.pathname.split("/").filter(Boolean);
+  const Authdata = useSelector((state: any) => state?.authlogin);
+  const dispatch = useDispatch<AppDispatch>();
+  console.log("mainlayout", Authdata);
   const toggleDrawer = () => {
     setOpen(!open);
   };
-
+  const Logout = () => {
+    sessionStorage.removeItem("token");
+    dispatch(clearError());
+    navigate("/");
+  };
   const menusForRole: RouteMenu[] = routeMenus["admin"] || [];
   return (
     <Box sx={{ display: "flex" }}>
@@ -50,7 +61,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({
           <Typography variant="h6" sx={{ flexGrow: 1 }}>
             {pathnames}
           </Typography>
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit" onClick={Logout}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
 
@@ -60,7 +73,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
         onClose={toggleDrawer}
         sx={{
           "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
-        }}>
+        }}
+      >
         <Toolbar />
         <List>
           {menusForRole.map((menu) => (
@@ -68,7 +82,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
               <ListItemButton
                 component={Link}
                 to={menu.path}
-                onClick={toggleDrawer}>
+                onClick={toggleDrawer}
+              >
                 <ListItemText primary={menu.label} />
               </ListItemButton>
             </ListItem>
