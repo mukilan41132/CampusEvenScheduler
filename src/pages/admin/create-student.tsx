@@ -12,7 +12,8 @@ import { TextField } from "@mui/material";
 import { registerStudent } from "../../slices/create-student/thunk";
 
 interface Student {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
   phoneNo: string;
   gender: string;
@@ -25,6 +26,7 @@ interface Student {
 interface CreateStudentProps {
   visible: boolean;
   setVisible: (value: boolean) => void;
+  setRefetch: (value: boolean) => void;
 }
 const departments = [
   "Computer Science Engineering",
@@ -81,33 +83,42 @@ const departments = [
   "Fashion Design",
   "Graphic Design",
 ];
-
+const initialStudentState = {
+  firstName: "",
+  lastName: "",
+  phoneNo: "",
+  email: "",
+  yearOfStudy: "",
+  semester: "",
+  gender: "",
+  age: "",
+  department: "",
+  rollNo: "",
+};
 const CreateStudent: React.FC<CreateStudentProps> = ({
   visible,
   setVisible,
+  setRefetch,
 }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const records = useSelector((state: any) => state?.students);
-  const [createstudents, setCreatestudent] = useState<Student>({
-    name: "",
-    email: "",
-    phoneNo: "",
-    yearOfStudy: "",
-    semester: "",
-    gender: "",
-    age: "",
-    department: "",
-    rollNo: "",
-  });
+  const [createstudents, setCreatestudent] =
+    useState<Student>(initialStudentState);
   const register = async () => {
     dispatch(registerStudent(createstudents));
+    setRefetch(true);
+    setVisible(false);
+  };
+
+  const clearState = () => {
+    setCreatestudent(initialStudentState);
+    setVisible(false);
   };
   const footerContent = (
     <div className="footer-btn">
       <CustomButton
         size="small"
         color="primary"
-        onClick={() => register()}
+        onClick={clearState}
         type="submit"
         text={"Cancel"}
       />
@@ -139,14 +150,22 @@ const CreateStudent: React.FC<CreateStudentProps> = ({
         style={{ width: "50rem" }}
         onHide={() => {
           if (!visible) return;
-          setVisible(false);
-        }}>
+          clearState();
+        }}
+      >
         <form className="students-container">
           <CustomTextField
-            label={"Name"}
-            value={createstudents.name}
+            label={"First Name"}
+            value={createstudents.firstName}
             onChange={(e) =>
-              setCreatestudent({ ...createstudents, name: e.target.value })
+              setCreatestudent({ ...createstudents, firstName: e.target.value })
+            }
+          />
+          <CustomTextField
+            label={"Last Name"}
+            value={createstudents.lastName}
+            onChange={(e) =>
+              setCreatestudent({ ...createstudents, lastName: e.target.value })
             }
           />
           <CustomTextField

@@ -2,9 +2,13 @@ import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { getAllStudents, registerStudent } from "./thunk";
 
 export interface Student {
-  name: string;
+  firstName: string;
+  lastName: string;
   email: string;
+  phoneNo: string;
   gender: string;
+  yearOfStudy: string;
+  semester: string;
   age: string;
   department: string;
   rollNo: string;

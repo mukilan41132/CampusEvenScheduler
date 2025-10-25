@@ -23,21 +23,20 @@ interface Student {
 }
 
 const ManageStudent: React.FC = () => {
-  const [students, setStudents] = useState<Student[]>([]);
+  const [refetch, setRefetch] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
-    const records = useSelector((state: any) => state?.students);
-    console.log("records",records.students)
+  const records = useSelector((state: any) => state?.students);
+
   useEffect(() => {
     fetchStudents();
-  }, [dispatch ,visible]);
+  }, [dispatch, refetch]);
 
   const fetchStudents = async () => {
     try {
       setLoading(true);
       dispatch(getAllStudents());
-
     } catch (err) {
       console.error("Error fetching students:", err);
     } finally {
@@ -110,18 +109,19 @@ const ManageStudent: React.FC = () => {
       </div>
 
       <DataTable
-        value={records?.students||[]}
+        value={records?.students || []}
         rows={5}
         loading={loading}
         stripedRows
         size="small"
         responsiveLayout="scroll"
+      
         paginator
         rowsPerPageOptions={[5, 10, 25, 50]}
       >
         <Column field="firstName" header="Name" sortable />
-                <Column field="lastName" header="Name" sortable />
-                        
+        <Column field="lastName" header="Name" sortable />
+
         <Column field="email" header="Email" sortable />
         <Column field="gender" header="Gender" sortable />
         <Column field="age" header="Age" sortable />
@@ -129,7 +129,11 @@ const ManageStudent: React.FC = () => {
         <Column field="rollNo" header="Roll No" sortable />
         <Column header="Actions" body={actionBodyTemplate} />
       </DataTable>
-      <CreateStudent visible={visible} setVisible={setVisible} />
+      <CreateStudent
+        visible={visible}
+        setVisible={setVisible}
+        setRefetch={setRefetch}
+      />
     </div>
   );
 };
