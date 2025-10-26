@@ -110,18 +110,17 @@ const ManageStudent: React.FC = () => {
 
       <DataTable
         value={records?.students || []}
-        rows={5}
+        rows={10}
         loading={loading}
         stripedRows
         size="small"
         responsiveLayout="scroll"
-      
         paginator
         rowsPerPageOptions={[5, 10, 25, 50]}
       >
+        <Column  header="S.No" body={(_, options) => options.rowIndex + 1} />
         <Column field="firstName" header="Name" sortable />
         <Column field="lastName" header="Name" sortable />
-
         <Column field="email" header="Email" sortable />
         <Column field="gender" header="Gender" sortable />
         <Column field="age" header="Age" sortable />

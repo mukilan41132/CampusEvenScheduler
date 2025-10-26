@@ -19,7 +19,7 @@ export const registerStudent = createAsyncThunk(
   async (studentData: Student, { rejectWithValue }) => {
     try {
       const response = await HttpAxios.axios().post(
-        "/Student/student/register",
+        "/Student/register",
         studentData
       );
       return response.data;

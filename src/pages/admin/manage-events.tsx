@@ -195,7 +195,7 @@ const ManageEvents: React.FC = () => {
 
       <DataTable
         value={students}
-        rows={5}
+        rows={10}
         loading={loading}
         stripedRows
         size="small"
