@@ -28,7 +28,9 @@ const Authindex = () => {
       } else {
         navigate("/");
       }
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
