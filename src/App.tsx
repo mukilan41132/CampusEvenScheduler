@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Authindex from "./pages/Auth/Authindex";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import MainLayout from "./components/MainLayout/MainLayout";
+import MainLayout from "./layouts/MainLayout/MainLayout";
 import { routesConfig } from "./routes/routes";
 
 

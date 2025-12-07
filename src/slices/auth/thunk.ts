@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import HttpAxios from "../../utils/axiosInstance";
 
-interface login {
+export interface login {
   username: string;
   password: string;
 }

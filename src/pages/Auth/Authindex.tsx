@@ -4,13 +4,13 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
-import { loginAuth } from "../../slices/auth/thunk";
+import { loginAuth, type login } from "../../slices/auth/thunk";
 
 const Authindex = () => {
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const Authdata = useSelector((state: any) => state.authlogin);
@@ -20,7 +20,7 @@ const Authindex = () => {
 
     try {
       if (password !== "" && email !== "") {
-        const auth = {
+        const auth:login = {
           username: email,
           password: password,
         };

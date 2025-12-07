@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
@@ -9,6 +7,8 @@ import CustomButton from "../../components/Button/CustomButton";
 
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CreateEventForm from "./create-events";
+import CommonTable from "../../components/Table/DynamicTable";
+import ActionIcon from "../../components/Button/ActionIconBtn";
 
 interface Student {
   id: string;
@@ -111,11 +111,50 @@ const studentsdata: Student[] = [
     rollNo: "ME110",
   },
 ];
+
+const columns = [
+  {
+    field: "name",
+    header: "Name",
+    filter: true,
+    filterPlaceholder: "Search by name",
+    style: { minWidth: "12rem" },
+  },
+  {
+    field: "email",
+    header: "Email",
+    filter: true,
+    filterPlaceholder: "Search by email",
+    style: { minWidth: "14rem" },
+  },
+  {
+    field: "gender",
+    header: "Gender",
+    style: { minWidth: "8rem" },
+  },
+  {
+    field: "age",
+    header: "Age",
+    style: { minWidth: "6rem" },
+  },
+  {
+    field: "department",
+    header: "Department",
+    filter: true,
+    filterPlaceholder: "Search by department",
+    style: { minWidth: "12rem" },
+  },
+  {
+    field: "rollNo",
+    header: "Roll No",
+    style: { minWidth: "10rem" },
+  },
+];
 const ManageEvents: React.FC = () => {
   const [students, setStudents] = useState<Student[]>(studentsdata);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-
+  const [filters, setFilters] = useState(null);
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -131,27 +170,25 @@ const ManageEvents: React.FC = () => {
       setLoading(false);
     }
   };
-
   const actionBodyTemplate = (rowData: Student) => {
     return (
       <div style={{ display: "flex", gap: "8px" }}>
-        <Tooltip title="Edit">
-          <IconButton
-            size="small"
-            color="warning"
-            onClick={() => handleEdit(rowData)}>
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title="Delete">
-          <IconButton
-            size="small"
-            color="error"
-            onClick={() => handleDelete(rowData.id)}>
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        <ActionIcon
+          title="Filter"
+          icon={<EditIcon />}
+          color="warning"
+          size="small"
+          sx={{ marginRight: "15px" }}
+          onClick={() => handleEdit(rowData)}
+        />
+        <ActionIcon
+          title="Filter"
+          icon={<DeleteIcon />}
+          color="error"
+          size="small"
+          sx={{ marginRight: "15px" }}
+          onClick={() => handleDelete(rowData.id)}
+        />
       </div>
     );
   };
@@ -180,7 +217,8 @@ const ManageEvents: React.FC = () => {
               size="small"
               sx={{ marginRight: "15px" }}
               color="error"
-              onClick={() => console.log("Filter clicked")}>
+              onClick={() => console.log("Filter clicked")}
+            >
               <FilterListIcon />
             </IconButton>
           </Tooltip>
@@ -192,24 +230,15 @@ const ManageEvents: React.FC = () => {
           />
         </div>
       </div>
-
-      <DataTable
+      <CommonTable
         value={students}
-        rows={10}
         loading={loading}
-        stripedRows
-        size="small"
-        responsiveLayout="scroll"
-        paginator
-        rowsPerPageOptions={[5, 10, 25, 50]}>
-        <Column field="name" header="Name" sortable />
-        <Column field="email" header="Email" sortable />
-        <Column field="gender" header="Gender" sortable />
-        <Column field="age" header="Age" sortable />
-        <Column field="department" header="Department" sortable />
-        <Column field="rollNo" header="Roll No" sortable />
-        <Column header="Actions" body={actionBodyTemplate} />
-      </DataTable>
+        columns={columns}
+        filters={filters}
+        onFilter={(e: any) => setFilters(e.filters)}
+        globalFilterFields={["name", "email", "department", "gender", "rollNo"]}
+        header={<h3>Student List</h3>}
+      />
       <CreateEventForm visible={visible} setVisible={setVisible} />
     </div>
   );

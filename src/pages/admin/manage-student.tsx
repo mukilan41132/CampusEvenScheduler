@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton, Tooltip } from "@mui/material";
 import HttpAxios from "../../utils/axiosInstance";
 import CustomButton from "../../components/Button/CustomButton";
 import CreateStudent from "./create-student";
@@ -11,6 +8,8 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { getAllStudents } from "../../slices/create-student/thunk";
+import DynamicTable from "../../components/Table/DynamicTable";
+import ActionIcon from "../../components/Button/ActionIconBtn";
 
 interface Student {
   id: string;
@@ -28,7 +27,7 @@ const ManageStudent: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const records = useSelector((state: any) => state?.students);
-
+  const [filters, setFilters] = useState(null);
   useEffect(() => {
     fetchStudents();
   }, [dispatch, refetch]);
@@ -47,29 +46,61 @@ const ManageStudent: React.FC = () => {
   const actionBodyTemplate = (rowData: Student) => {
     return (
       <div style={{ display: "flex", gap: "8px" }}>
-        <Tooltip title="Edit">
-          <IconButton
-            size="small"
-            color="warning"
-            onClick={() => handleEdit(rowData)}
-          >
-            <EditIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
-
-        <Tooltip title="Delete">
-          <IconButton
-            size="small"
-            color="error"
-            onClick={() => handleDelete(rowData.id)}
-          >
-            <DeleteIcon fontSize="small" />
-          </IconButton>
-        </Tooltip>
+        <ActionIcon
+          title="Filter"
+          icon={<EditIcon />}
+          color="warning"
+          size="small"
+          sx={{ marginRight: "15px" }}
+          onClick={() => handleEdit(rowData)}
+        />
+        <ActionIcon
+          title="Filter"
+          icon={<DeleteIcon />}
+          color="error"
+          size="small"
+          sx={{ marginRight: "15px" }}
+          onClick={() => handleDelete(rowData.id)}
+        />
       </div>
     );
   };
-
+  const columns = [
+    {
+      header: "S.No",
+      body: (_: any, options: { rowIndex: number }) => options.rowIndex + 1,
+      style: { width: "6rem" },
+    },
+    {
+      field: "firstName",
+      header: "Name",
+      filter: true,
+      filterPlaceholder: "Search by Name",
+    },
+    {
+      field: "gender",
+      header: "Gender",
+    },
+    {
+      field: "age",
+      header: "Age",
+    },
+    {
+      field: "department",
+      header: "Department",
+      filter: true,
+      filterPlaceholder: "Search by Department",
+    },
+    {
+      field: "rollNo",
+      header: "Roll No",
+    },
+    {
+      header: "Actions",
+      body: (row: any) => actionBodyTemplate(row),
+      style: { width: "8rem" },
+    },
+  ];
   const handleEdit = (student: Student) => {
     setVisible(true);
     console.log("Edit student", student);
@@ -89,16 +120,14 @@ const ManageStudent: React.FC = () => {
       <div className="header-btn">
         <h3>Manage Students </h3>
         <div>
-          <Tooltip title="Delete">
-            <IconButton
-              size="small"
-              sx={{ marginRight: "15px" }}
-              color="error"
-              onClick={() => console.log("Filter clicked")}
-            >
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
+          <ActionIcon
+            title="Filter"
+            icon={<FilterListIcon />}
+            color="error"
+            sx={{ marginRight: "15px" }}
+            onClick={() => console.log("Filter clicked")}
+          />
+
           <CustomButton
             text={"Create Students"}
             onClick={() => {
@@ -107,27 +136,15 @@ const ManageStudent: React.FC = () => {
           />
         </div>
       </div>
-
-      <DataTable
+      <DynamicTable
         value={records?.students || []}
-        rows={10}
         loading={loading}
-        stripedRows
-        size="small"
-        responsiveLayout="scroll"
-        paginator
-        rowsPerPageOptions={[5, 10, 25, 50]}
-      >
-        <Column  header="S.No" body={(_, options) => options.rowIndex + 1} />
-        <Column field="firstName" header="Name" sortable />
-        <Column field="lastName" header="Name" sortable />
-        <Column field="email" header="Email" sortable />
-        <Column field="gender" header="Gender" sortable />
-        <Column field="age" header="Age" sortable />
-        <Column field="department" header="Department" sortable />
-        <Column field="rollNo" header="Roll No" sortable />
-        <Column header="Actions" body={actionBodyTemplate} />
-      </DataTable>
+        columns={columns}
+        filters={filters}
+        onFilter={(e: any) => setFilters(e.filters)}
+        globalFilterFields={["firstName", "rollNo", "department", "gender"]}
+        header={<h3>Student List</h3>}
+      />
       <CreateStudent
         visible={visible}
         setVisible={setVisible}
