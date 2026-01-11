@@ -1,15 +1,14 @@
 import CustomTextField from "../../components/Inputfield/CustomTextField";
-import { useState } from "react";
+import { memo, useState } from "react";
 import "../../styles/create-student/createstudent.css";
 import CustomButton from "../../components/Button/CustomButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
-
 import { Dialog } from "primereact/dialog";
-import { Avatar } from "primereact/avatar";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
 import { registerStudent } from "../../slices/create-student/thunk";
+import FileUpload from "../../components/FileUpload/FileUpload";
 
 interface Student {
   firstName: string;
@@ -95,151 +94,156 @@ const initialStudentState = {
   department: "",
   rollNo: "",
 };
-const CreateStudent: React.FC<CreateStudentProps> = ({
-  visible,
-  setVisible,
-  setRefetch,
-}) => {
-  const dispatch = useDispatch<AppDispatch>();
-  const [createstudents, setCreatestudent] =
-    useState<Student>(initialStudentState);
-  const register = async () => {
-    dispatch(registerStudent(createstudents));
-    setRefetch(true);
-    setVisible(false);
-  };
+const CreateStudent = memo(
+  ({ visible, setVisible, setRefetch }: CreateStudentProps) => {
+    const dispatch = useDispatch<AppDispatch>();
+    const [createstudents, setCreatestudent] =
+      useState<Student>(initialStudentState);
 
-  const clearState = () => {
-    setCreatestudent(initialStudentState);
-    setVisible(false);
-  };
-  const footerContent = (
-    <div className="footer-btn">
-      <CustomButton
-        size="small"
-        color="primary"
-        onClick={clearState}
-        type="submit"
-        text={"Cancel"}
-      />
-      <CustomButton
-        size="small"
-        onClick={() => register()}
-        color="secondary"
-        type="submit"
-        text={"Register"}
-      />
-    </div>
-  );
-  const headerElement = (
-    <div className="inline-flex align-items-center justify-content-center gap-2">
-      <Avatar
-        image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png"
-        shape="circle"
-      />
-      <span className="font-bold white-space-nowrap">Amy Elsner</span>
-    </div>
-  );
-  return (
-    <>
-      <Dialog
-        visible={visible}
-        modal
-        header={headerElement}
-        footer={footerContent}
-        style={{ width: "50rem" }}
-        onHide={() => {
-          if (!visible) return;
-          clearState();
-        }}
-      >
-        <form className="students-container">
-          <CustomTextField
-            label={"First Name"}
-            value={createstudents.firstName}
-            onChange={(e) =>
-              setCreatestudent({ ...createstudents, firstName: e.target.value })
-            }
-          />
-          <CustomTextField
-            label={"Last Name"}
-            value={createstudents.lastName}
-            onChange={(e) =>
-              setCreatestudent({ ...createstudents, lastName: e.target.value })
-            }
-          />
-          <CustomTextField
-            label={"Email"}
-            value={createstudents.email}
-            onChange={(e) =>
-              setCreatestudent({ ...createstudents, email: e.target.value })
-            }
-          />
-          <CustomTextField
-            label={"Contact No"}
-            value={createstudents.phoneNo}
-            onChange={(e) =>
-              setCreatestudent({ ...createstudents, phoneNo: e.target.value })
-            }
-          />
-          <Autocomplete
-            disablePortal
-            size="small"
-            options={["Male", "Female", "Other"]}
-            value={createstudents.gender || ""}
-            onChange={(_, value: any) =>
-              setCreatestudent({ ...createstudents, gender: value })
-            }
-            renderInput={(params) => <TextField {...params} label="Gender" />}
-          />
+    const register = async () => {
+      dispatch(registerStudent(createstudents));
+      setRefetch(true);
+      setVisible(false);
+    };
 
-          <CustomTextField
-            label={"Age"}
-            value={createstudents.age}
-            onChange={(e) =>
-              setCreatestudent({ ...createstudents, age: e.target.value })
-            }
-          />
-          <Autocomplete
-            disablePortal
-            size="small"
-            options={departments}
-            value={createstudents.department || ""}
-            onChange={(_, value: any) =>
-              setCreatestudent({ ...createstudents, department: value })
-            }
-            renderInput={(params) => (
-              <TextField {...params} label="Department" />
-            )}
-          />
-          <CustomTextField
-            label={"RollNo"}
-            value={createstudents.rollNo}
-            onChange={(e) =>
-              setCreatestudent({ ...createstudents, rollNo: e.target.value })
-            }
-          />
-          <CustomTextField
-            label={"Semester"}
-            value={createstudents.semester}
-            onChange={(e) =>
-              setCreatestudent({ ...createstudents, semester: e.target.value })
-            }
-          />
-          <CustomTextField
-            label={"YearOfStudy"}
-            value={createstudents.yearOfStudy}
-            onChange={(e) =>
-              setCreatestudent({
-                ...createstudents,
-                yearOfStudy: e.target.value,
-              })
-            }
-          />
-        </form>
-      </Dialog>
-    </>
-  );
-};
+    const clearState = () => {
+      setCreatestudent(initialStudentState);
+      setVisible(false);
+    };
+    const footerContent = (
+      <div className="footer-btn">
+        <CustomButton
+          size="small"
+          color="primary"
+          onClick={clearState}
+          type="submit"
+          text={"Cancel"}
+        />
+        <CustomButton
+          size="small"
+          onClick={() => register()}
+          color="secondary"
+          type="submit"
+          text={"Register"}
+        />
+      </div>
+    );
+    const headerElement = (
+      <div className="inline-flex align-items-center justify-content-center gap-2">
+        <FileUpload />
+        <span className="font-bold white-space-nowrap">Amy Elsner</span>
+      </div>
+    );
+    return (
+      <>
+        <Dialog
+          visible={visible}
+          modal
+          header={headerElement}
+          footer={footerContent}
+          style={{ width: "50rem" }}
+          onHide={() => {
+            if (!visible) return;
+            clearState();
+          }}
+        >
+          <form className="students-container">
+            <CustomTextField
+              label={"First Name"}
+              value={createstudents.firstName}
+              onChange={(e) =>
+                setCreatestudent({
+                  ...createstudents,
+                  firstName: e.target.value,
+                })
+              }
+            />
+            <CustomTextField
+              label={"Last Name"}
+              value={createstudents.lastName}
+              onChange={(e) =>
+                setCreatestudent({
+                  ...createstudents,
+                  lastName: e.target.value,
+                })
+              }
+            />
+            <CustomTextField
+              label={"Email"}
+              value={createstudents.email}
+              onChange={(e) =>
+                setCreatestudent({ ...createstudents, email: e.target.value })
+              }
+            />
+            <CustomTextField
+              label={"Contact No"}
+              value={createstudents.phoneNo}
+              onChange={(e) =>
+                setCreatestudent({ ...createstudents, phoneNo: e.target.value })
+              }
+            />
+            <Autocomplete
+              disablePortal
+              size="small"
+              options={["Male", "Female", "Other"]}
+              value={createstudents.gender || ""}
+              onChange={(_, value: any) =>
+                setCreatestudent({ ...createstudents, gender: value })
+              }
+              renderInput={(params) => <TextField {...params} label="Gender" />}
+            />
+
+            <CustomTextField
+              label={"Age"}
+              value={createstudents.age}
+              onChange={(e) =>
+                setCreatestudent({ ...createstudents, age: e.target.value })
+              }
+            />
+            <Autocomplete
+              disablePortal
+              size="small"
+              options={departments}
+              value={createstudents.department || ""}
+              onChange={(_, value: any) =>
+                setCreatestudent({ ...createstudents, department: value })
+              }
+              renderInput={(params) => (
+                <TextField {...params} label="Department" />
+              )}
+            />
+            <CustomTextField
+              label={"RollNo"}
+              value={createstudents.rollNo}
+              onChange={(e) =>
+                setCreatestudent({ ...createstudents, rollNo: e.target.value })
+              }
+            />
+            <CustomTextField
+              label={"Semester"}
+              value={createstudents.semester}
+              onChange={(e) =>
+                setCreatestudent({
+                  ...createstudents,
+                  semester: e.target.value,
+                })
+              }
+            />
+            <CustomTextField
+              label={"YearOfStudy"}
+              value={createstudents.yearOfStudy}
+              onChange={(e) =>
+                setCreatestudent({
+                  ...createstudents,
+                  yearOfStudy: e.target.value,
+                })
+              }
+            />
+          </form>
+        </Dialog>
+      </>
+    );
+  }
+);
 
 export default CreateStudent;

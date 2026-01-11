@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
@@ -9,6 +9,7 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 import CreateEventForm from "./create-events";
 import CommonTable from "../../components/Table/DynamicTable";
 import ActionIcon from "../../components/Button/ActionIconBtn";
+import SearchFilter from "../../components/SearchFilter/SearchFilter";
 
 interface Student {
   id: string;
@@ -155,6 +156,27 @@ const ManageEvents: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const [filters, setFilters] = useState(null);
+  const [findByName, setFindByName] = useState<string>("");
+  const [findByDepartment, setFindByDepartment] = useState<string>("");
+  const [findByRollNo, setFindByRollNo] = useState<string>("");
+  const [toggle, setToggle] = useState<boolean>(false);
+
+  const popup = useRef<HTMLParagraphElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+  useEffect(() => {
+    if (popup.current == null || buttonRef.current == null) return;
+    popup.current.style.transition =
+      "margin-right 300ms ease, opacity 300ms ease";
+    popup.current.style.marginRight = toggle ? "25px" : "0px";
+    popup.current.style.opacity = toggle ? "1" : "0";
+    return () => {
+      if (popup.current) {
+        popup.current.style.transition = "";
+      }
+    };
+  }, [toggle]);
+
   useEffect(() => {
     fetchStudents();
   }, []);
@@ -169,28 +191,6 @@ const ManageEvents: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
-  const actionBodyTemplate = (rowData: Student) => {
-    return (
-      <div style={{ display: "flex", gap: "8px" }}>
-        <ActionIcon
-          title="Filter"
-          icon={<EditIcon />}
-          color="warning"
-          size="small"
-          sx={{ marginRight: "15px" }}
-          onClick={() => handleEdit(rowData)}
-        />
-        <ActionIcon
-          title="Filter"
-          icon={<DeleteIcon />}
-          color="error"
-          size="small"
-          sx={{ marginRight: "15px" }}
-          onClick={() => handleDelete(rowData.id)}
-        />
-      </div>
-    );
   };
 
   const handleEdit = (student: Student) => {
@@ -211,13 +211,31 @@ const ManageEvents: React.FC = () => {
     <div className="card">
       <div className="header-btn">
         <h3>Manage Events </h3>
+        {toggle && (
+          <SearchFilter
+            popup={popup}
+            labelObj={{
+              label1: "FindByName",
+              label2: "FindByDepartment",
+              label3: "FindByRollNo",
+            }}
+            value1={findByName}
+            onChange1={setFindByName}
+            onChange2={setFindByDepartment}
+            onChange3={setFindByRollNo}
+            value2={findByDepartment}
+            value3={findByRollNo}
+          />
+        )}
+
         <div>
           <Tooltip title="Delete">
             <IconButton
+              ref={buttonRef}
               size="small"
               sx={{ marginRight: "15px" }}
               color="error"
-              onClick={() => console.log("Filter clicked")}
+              onClick={() => setToggle((prev) => !prev)}
             >
               <FilterListIcon />
             </IconButton>

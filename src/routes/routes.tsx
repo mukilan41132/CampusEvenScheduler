@@ -1,6 +1,6 @@
 import Dashbord from "../pages/Dashbord/Dashbord";
 import ManageStudent from "../pages/admin/manage-student";
- 
+
 import ManageEvents from "../pages/admin/manage-events";
 
 export interface AppRoute {

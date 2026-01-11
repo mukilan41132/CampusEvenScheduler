@@ -1,0 +1,6 @@
+.search-filter-combo {
+  display: flex;
+  margin-left: auto;
+  gap: 10px;
+  opacity: 0;
+}

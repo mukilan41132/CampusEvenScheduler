@@ -6,10 +6,8 @@ export interface RouteMenu {
 const routeMenus: Record<string, RouteMenu[]> = {
   admin: [
     { label: "Dashboard", path: "/dashboard" },
-    { label: "Create Event", path: "/create-event" },
     { label: "Manage Students", path: "/manage-students" },
     { label: "Manage Events", path: "/manage-events" },
-    { label: "Student Register", path: "/student-register" },
   ],
   faculty: [
     { label: "Dashboard", path: "/dashboard" },
