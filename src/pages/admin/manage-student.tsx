@@ -3,7 +3,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HttpAxios from "../../utils/axiosInstance";
 import CustomButton from "../../components/Button/CustomButton";
-import CreateStudent from "./create-student";
+import CreateStudent, {
+  initialStudentState,
+  type Student,
+} from "./create-student";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch } from "../../store/store";
@@ -11,35 +14,25 @@ import { getAllStudents } from "../../slices/create-student/thunk";
 import DynamicTable from "../../components/Table/DynamicTable";
 import ActionIcon from "../../components/Button/ActionIconBtn";
 
-interface Student {
-  id: string;
-  name: string;
-  email: string;
-  gender: string;
-  age: string;
-  department: string;
-  rollNo: string;
-}
-
 const ManageStudent: React.FC = () => {
-  const [refetch, setRefetch] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const records = useSelector((state: any) => state?.students);
   const [filters, setFilters] = useState(null);
+
+  const [studentState, setStudentState] =
+    useState<Student>(initialStudentState);
   useEffect(() => {
     fetchStudents();
-  }, [dispatch, refetch]);
+  }, [dispatch]);
 
   const fetchStudents = async () => {
     try {
-      setLoading(true);
-      dispatch(getAllStudents());
+      await dispatch(getAllStudents());
     } catch (err) {
       console.error("Error fetching students:", err);
     } finally {
-      setLoading(false);
     }
   };
 
@@ -60,7 +53,7 @@ const ManageStudent: React.FC = () => {
           color="error"
           size="small"
           sx={{ marginRight: "15px" }}
-          onClick={() => handleDelete(rowData.id)}
+          onClick={() => handleDelete(rowData?.id)}
         />
       </div>
     );
@@ -103,7 +96,7 @@ const ManageStudent: React.FC = () => {
   ];
   const handleEdit = (student: Student) => {
     setVisible(true);
-    console.log("Edit student", student);
+    setStudentState(student);
   };
 
   const handleDelete = async (id: string) => {
@@ -143,12 +136,12 @@ const ManageStudent: React.FC = () => {
         filters={filters}
         onFilter={(e: any) => setFilters(e.filters)}
         globalFilterFields={["firstName", "rollNo", "department", "gender"]}
-        header={<h3>Student List</h3>}
       />
       <CreateStudent
         visible={visible}
         setVisible={setVisible}
-        setRefetch={setRefetch}
+        studentState={studentState}
+        setStudentState={setStudentState}
       />
     </div>
   );

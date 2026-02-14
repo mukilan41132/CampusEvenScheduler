@@ -2,7 +2,28 @@ import Card from "./components/card";
 import "../../styles/Dashbord/dashbord.css";
 import calendericon from "../../assets/calender-icon.svg";
 import AlleventsCards from "./components/AllEventsCard";
+import { useRef, useState, useEffect, useMemo } from "react";
+
 const Dashbord = () => {
+  const [count, setCount] = useState(0);
+  // useEffect(() => {
+  //   console.log("Runs every render");
+  // }, [{ a: 1 }]);
+  const fetchData = () => {
+    setCount(count + 1);
+  };
+
+  // console.log("render");
+
+  // useEffect(() => {
+  //   console.log("effect");
+  //   fetchData();
+  // }, [fetchData]);
+  console.log("effect");
+  const obj = useMemo(() => ({ a: 1 }), []);
+  useEffect(() => {
+    fetchData();
+  }, [obj]);
   const events = [
     {
       name: "Upcoming Events",
@@ -86,10 +107,10 @@ const Dashbord = () => {
   return (
     <>
       <div className="container-card">
-        {events.map((val, index: number) => {
+        {events.map((val) => {
           return (
             <Card
-              key={index}
+              key={val.name}
               icon={val.img}
               title={val.name}
               description={val.count}
@@ -97,11 +118,12 @@ const Dashbord = () => {
           );
         })}
       </div>
+
       <div className="card-event-container">
-        {eventsData.map((val, index: number) => {
+        {eventsData.map((val) => {
           return (
             <AlleventsCards
-              key={index}
+              key={val.title}
               title={val.title}
               name={val.name}
               date={val.date}
@@ -115,3 +137,52 @@ const Dashbord = () => {
 };
 
 export default Dashbord;
+
+function BugExample() {
+  const [toggle, setToggle] = useState(true);
+  const [num, setNum] = useState(0);
+  const [name, setName] = useState("Mukilan");
+  const [age, setAge] = useState("23");
+  const refvalue = useRef(0);
+
+  function handleClick() {
+    refvalue.current += 1;
+  }
+
+  return toggle ? (
+    <>
+      <h3>Name: {name}</h3>
+      <h3>render ref: {refvalue.current}</h3>
+      <h3>render num: {num}</h3>
+      <button onClick={() => setName("Arun")}>Change Name</button>
+      <button onClick={() => setToggle(false)}>Toggle</button>
+      <button onClick={() => setNum((prev) => prev + 1)}>state add</button>
+      <button onClick={handleClick}>ref add</button>
+    </>
+  ) : (
+    <>
+      <h3>Age: {age}</h3>
+      <button onClick={() => setAge("30")}>Change Age</button>
+      <button onClick={() => setToggle(true)}>Toggle</button>
+    </>
+  );
+}
+
+function Counter() {
+  const [number, setNumber] = useState(0);
+
+  return (
+    <>
+      <h1>{number}</h1>
+      <button
+        onClick={() => {
+          setNumber((prev) => prev + 1);
+          setNumber((prev) => prev + 1);
+          setNumber((prev) => prev + 1);
+        }}
+      >
+        +3
+      </button>
+    </>
+  );
+}

@@ -54,6 +54,7 @@ const Authindex = () => {
           type="text"
           id="email"
           value={email}
+          autoFocus
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
           required

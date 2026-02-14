@@ -28,3 +28,18 @@ export const registerStudent = createAsyncThunk(
     }
   }
 );
+
+export const updateByid = createAsyncThunk(
+  "students/update",
+  async (studentData: Student, { rejectWithValue }) => {
+    try {
+      const response = await HttpAxios.axios().put(
+        "/Student/updateStudentById",
+        studentData
+      );
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);

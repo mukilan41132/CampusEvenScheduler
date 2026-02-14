@@ -7,10 +7,15 @@ import type { AppDispatch } from "../../store/store";
 import { Dialog } from "primereact/dialog";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
-import { registerStudent } from "../../slices/create-student/thunk";
+import {
+  getAllStudents,
+  registerStudent,
+  updateByid,
+} from "../../slices/create-student/thunk";
 import FileUpload from "../../components/FileUpload/FileUpload";
 
-interface Student {
+export interface Student {
+  id: string;
   firstName: string;
   lastName: string;
   email: string;
@@ -25,7 +30,9 @@ interface Student {
 interface CreateStudentProps {
   visible: boolean;
   setVisible: (value: boolean) => void;
-  setRefetch: (value: boolean) => void;
+
+  studentState: Student;
+  setStudentState: React.Dispatch<React.SetStateAction<Student>>;
 }
 const departments = [
   "Computer Science Engineering",
@@ -82,7 +89,8 @@ const departments = [
   "Fashion Design",
   "Graphic Design",
 ];
-const initialStudentState = {
+export const initialStudentState = {
+  id: "",
   firstName: "",
   lastName: "",
   phoneNo: "",
@@ -95,19 +103,30 @@ const initialStudentState = {
   rollNo: "",
 };
 const CreateStudent = memo(
-  ({ visible, setVisible, setRefetch }: CreateStudentProps) => {
+  ({
+    visible,
+    setVisible,
+    studentState,
+    setStudentState,
+  }: CreateStudentProps) => {
     const dispatch = useDispatch<AppDispatch>();
-    const [createstudents, setCreatestudent] =
-      useState<Student>(initialStudentState);
+    // studentState.age = "30";Uncaught TypeError: Cannot assign to read only property 'age' of object '#<Object>'
+    const registerOrUpdateById = async () => {
+      try {
+        if (studentState?.id) {
+          await dispatch(updateByid(studentState)).unwrap();
+        } else {
+          await dispatch(registerStudent(studentState)).unwrap();
+        }
 
-    const register = async () => {
-      dispatch(registerStudent(createstudents));
-      setRefetch(true);
-      setVisible(false);
+        dispatch(getAllStudents());
+      } catch (error) {
+        console.error("Operation failed", error);
+      }
     };
 
     const clearState = () => {
-      setCreatestudent(initialStudentState);
+      setStudentState(initialStudentState);
       setVisible(false);
     };
     const footerContent = (
@@ -121,7 +140,7 @@ const CreateStudent = memo(
         />
         <CustomButton
           size="small"
-          onClick={() => register()}
+          onClick={() => registerOrUpdateById()}
           color="secondary"
           type="submit"
           text={"Register"}
@@ -150,63 +169,63 @@ const CreateStudent = memo(
           <form className="students-container">
             <CustomTextField
               label={"First Name"}
-              value={createstudents.firstName}
+              value={studentState.firstName}
               onChange={(e) =>
-                setCreatestudent({
-                  ...createstudents,
+                setStudentState({
+                  ...studentState,
                   firstName: e.target.value,
                 })
               }
             />
             <CustomTextField
               label={"Last Name"}
-              value={createstudents.lastName}
+              value={studentState.lastName}
               onChange={(e) =>
-                setCreatestudent({
-                  ...createstudents,
+                setStudentState({
+                  ...studentState,
                   lastName: e.target.value,
                 })
               }
             />
             <CustomTextField
               label={"Email"}
-              value={createstudents.email}
+              value={studentState.email}
               onChange={(e) =>
-                setCreatestudent({ ...createstudents, email: e.target.value })
+                setStudentState({ ...studentState, email: e.target.value })
               }
             />
             <CustomTextField
               label={"Contact No"}
-              value={createstudents.phoneNo}
+              value={studentState.phoneNo}
               onChange={(e) =>
-                setCreatestudent({ ...createstudents, phoneNo: e.target.value })
+                setStudentState({ ...studentState, phoneNo: e.target.value })
               }
             />
             <Autocomplete
               disablePortal
               size="small"
               options={["Male", "Female", "Other"]}
-              value={createstudents.gender || ""}
+              value={studentState.gender || ""}
               onChange={(_, value: any) =>
-                setCreatestudent({ ...createstudents, gender: value })
+                setStudentState({ ...studentState, gender: value })
               }
               renderInput={(params) => <TextField {...params} label="Gender" />}
             />
 
             <CustomTextField
               label={"Age"}
-              value={createstudents.age}
+              value={studentState.age}
               onChange={(e) =>
-                setCreatestudent({ ...createstudents, age: e.target.value })
+                setStudentState({ ...studentState, age: e.target.value })
               }
             />
             <Autocomplete
               disablePortal
               size="small"
               options={departments}
-              value={createstudents.department || ""}
+              value={studentState.department || ""}
               onChange={(_, value: any) =>
-                setCreatestudent({ ...createstudents, department: value })
+                setStudentState({ ...studentState, department: value })
               }
               renderInput={(params) => (
                 <TextField {...params} label="Department" />
@@ -214,27 +233,27 @@ const CreateStudent = memo(
             />
             <CustomTextField
               label={"RollNo"}
-              value={createstudents.rollNo}
+              value={studentState.rollNo}
               onChange={(e) =>
-                setCreatestudent({ ...createstudents, rollNo: e.target.value })
+                setStudentState({ ...studentState, rollNo: e.target.value })
               }
             />
             <CustomTextField
               label={"Semester"}
-              value={createstudents.semester}
+              value={studentState.semester}
               onChange={(e) =>
-                setCreatestudent({
-                  ...createstudents,
+                setStudentState({
+                  ...studentState,
                   semester: e.target.value,
                 })
               }
             />
             <CustomTextField
               label={"YearOfStudy"}
-              value={createstudents.yearOfStudy}
+              value={studentState.yearOfStudy}
               onChange={(e) =>
-                setCreatestudent({
-                  ...createstudents,
+                setStudentState({
+                  ...studentState,
                   yearOfStudy: e.target.value,
                 })
               }

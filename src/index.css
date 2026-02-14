@@ -5,7 +5,6 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
- 
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,15 +24,14 @@ a:hover {
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: #f5f6fa; /* light gray background */
+
+
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
- 
 
 @media (prefers-color-scheme: light) {
   :root {
