@@ -50,9 +50,8 @@ const MainLayout: React.FC<MainLayoutProps> = ({
   };
   const menusForRole: RouteMenu[] = routeMenus["admin"] || [];
 
-  console.log("theme", theme);
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box>
       <AppBar position="fixed" sx={{ zIndex: 1201 }}>
         <Toolbar>
           <IconButton color="inherit" edge="start" onClick={toggleDrawer}>

@@ -60,7 +60,7 @@ const Authindex = () => {
           }
         }}
       >
-        {({ errors, touched, isValidating }) => (
+        {({ errors, touched }) => (
           <Form className="login-form">
             <h2>Sign In</h2>
             <ErrorMessage message={error} />

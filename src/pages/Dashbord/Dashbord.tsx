@@ -3,36 +3,40 @@ import calendericon from "../../assets/calender-icon.svg";
 import AlleventsCards from "./components/AllEventsCard";
 import Card from "./components/card";
 import "../../styles/Dashbord/dashbord.css";
+import DashboardCalendar from "./components/DashboardCalendar";
 const Dashbord = () => {
-  const [count, setCount] = useState(0);
-
-  const fetchData = () => {
-    setCount(count + 1);
-  };
-  Math.abs;
-  // console.log((([] as any) + []) as any);
-  console.log(0.6 + 0.5);
-  const num = [1, 2, 3, 4, 5];
-  const output = num.map((val: any) => val > 2);
-  console.log("output", output);
-
-  const obj1 = {
-    name: "rtg",
-  };
-  const obj2 = {
-    name: "qwe",
-  };
-
-  const result = { ...obj1, ...obj2 };
-
-  console.log("result", result);
-
-  console.log(Math.round(0.1) + Math.round(0.2));
-  const obj = useMemo(() => ({ a: 1 }), []);
-  useEffect(() => {
-    fetchData();
-  }, [obj]);
   const events = [
+    {
+      name: "Total Students",
+      count: "345",
+      img: calendericon,
+    },
+    {
+      name: "Total Faculty",
+      count: "48",
+      img: calendericon,
+    },
+    {
+      name: "Total Departments",
+      count: "12",
+      img: calendericon,
+    },
+    {
+      name: "Active Courses",
+      count: "36",
+      img: calendericon,
+    },
+    {
+      name: "Ongoing Exams",
+      count: "5",
+      img: calendericon,
+    },
+
+    {
+      name: "Fee Collection (This Month)",
+      count: "₹4,25,000",
+      img: calendericon,
+    },
     {
       name: "Upcoming Events",
       count: "345",
@@ -114,31 +118,33 @@ const Dashbord = () => {
 
   return (
     <>
-      <div className="container-card">
-        {events.map((val) => {
-          return (
-            <Card
-              key={val.name}
-              icon={val.img}
-              title={val.name}
-              description={val.count}
-            />
-          );
-        })}
-      </div>
-
-      <div className="card-event-container">
-        {eventsData.map((val) => {
-          return (
-            <AlleventsCards
-              key={val.title}
-              title={val.title}
-              name={val.name}
-              date={val.date}
-              cost={val.cost}
-            />
-          );
-        })}
+      <div className="main-container">
+        <div className="container-card">
+          {events.map((val) => {
+            return (
+              <Card
+                key={val.name}
+                icon={val.img}
+                title={val.name}
+                description={val.count}
+              />
+            );
+          })}
+        </div>
+        <DashboardCalendar />
+        {/* <div className="card-event-container">
+          {eventsData.map((val) => {
+            return (
+              <AlleventsCards
+                key={val.title}
+                title={val.title}
+                name={val.name}
+                date={val.date}
+                cost={val.cost}
+              />
+            );
+          })}
+        </div> */}
       </div>
     </>
   );
