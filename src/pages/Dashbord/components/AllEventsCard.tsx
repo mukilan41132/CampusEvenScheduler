@@ -1,6 +1,6 @@
 import eventimg from "../../../assets/event-1.jpg";
-import "../../../styles/Card/AllEventsCard.css";
 import calendericon from "../../../assets/calender-icon.svg";
+import "../../../styles/Card/AllEventsCard.css";
 type EventCardProps = {
   title: string;
   name: string;

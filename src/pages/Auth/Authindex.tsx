@@ -1,37 +1,30 @@
 import { useEffect, useState } from "react";
-import "../../styles/Auth/auth.css";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import type { AppDispatch } from "../../store/store";
 import { useDispatch, useSelector } from "react-redux";
+import { Formik, Form, Field } from "formik";
 import { loginAuth, type login } from "../../slices/auth/thunk";
+import { validateEmail, validatePassword } from "../../Validation/basic";
+import ErrorMessage from "../../components/Error/ErrorMessage";
+import "../../styles/Auth/auth.css";
 
 const Authindex = () => {
-
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
   const dispatch = useDispatch<AppDispatch>();
   const Authdata = useSelector((state: any) => state.authlogin);
+  const [error, setError] = useState<string | null>("");
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (!error) return;
 
-    try {
-      if (password !== "" && email !== "") {
-        const auth:login = {
-          username: email,
-          password: password,
-        };
-        dispatch(loginAuth(auth));
-      } else {
-        navigate("/");
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    const timer = setTimeout(() => {
+      setError(null);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [error]);
 
   useEffect(() => {
     if (!Authdata) return;
@@ -46,52 +39,68 @@ const Authindex = () => {
 
   return (
     <div className="login-container">
-      <form onSubmit={handleLogin} className="login-form">
-        <h2>Sign In</h2>
+      <Formik
+        initialValues={{
+          password: "",
+          email: "",
+        }}
+        onSubmit={(values) => {
+          setError("");
 
-        <label htmlFor="email">Email</label>
-        <input
-          type="text"
-          id="email"
-          value={email}
-          autoFocus
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Enter your email"
-          required
-        />
-        <label htmlFor="password">Password</label>
-        <div className="password-wrapper">
-          <input
-            type={showPassword ? "text" : "password"}
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Enter your password"
-            required
-          />
-          <span
-            className="toggle-eye"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <FaEyeSlash /> : <FaEye />}
-          </span>
-        </div>
+          try {
+            const auth: login = {
+              username: values.email,
+              password: values.password,
+            };
 
-        <button type="submit">Sign In</button>
+            dispatch(loginAuth(auth));
+            navigate("/dashboard");
+          } catch (err: any) {
+            setError(err || "Invalid email or password");
+          }
+        }}
+      >
+        {({ errors, touched, isValidating }) => (
+          <Form className="login-form">
+            <h2>Sign In</h2>
+            <ErrorMessage message={error} />
+            <label htmlFor="email">Email</label>
+            <Field name="email" validate={validateEmail} />
+            {touched.email && errors.email && (
+              <ErrorMessage message={errors.email} />
+            )}
+            <label htmlFor="password">Password</label>
+            <div className="password-wrapper">
+              <Field
+                name="password"
+                type={showPassword ? "password" : "text"}
+                validate={validatePassword}
+              />
 
-        <p className="divider">or continue with</p>
-
-        <div className="social-buttons">
-          <button type="button">Google</button>
-          <button type="button">GitHub</button>
-          <button type="button">Facebook</button>
-        </div>
-
-        <p className="register">
-          I don't have an account?{" "}
-          <a href="/auth/register">Register for free</a>
-        </p>
-      </form>
+              <span
+                className="toggle-eye"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaEyeSlash /> : <FaEye />}
+              </span>
+            </div>
+            {touched.password && errors.password && (
+              <ErrorMessage message={errors.password} />
+            )}
+            <button type="submit">{"Sign In"}</button>
+            <p className="divider">or continue with</p>
+            <div className="social-buttons">
+              <button type="button">Google</button>
+              <button type="button">GitHub</button>
+              <button type="button">Facebook</button>
+            </div>
+            <p className="register">
+              I don't have an account?{" "}
+              <a href="/auth/register">Register for free</a>
+            </p>
+          </Form>
+        )}
+      </Formik>
     </div>
   );
 };

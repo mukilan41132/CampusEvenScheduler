@@ -1,19 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
-import HttpAxios from "../../utils/axiosInstance";
-import CustomButton from "../../components/Button/CustomButton";
-
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CreateEventForm from "./create-events";
-import CommonTable from "../../components/Table/DynamicTable";
-
-import SearchFilter from "../../components/SearchFilter/SearchFilter";
 import type { AppDispatch } from "../../store/store";
 import { getAllEvents } from "../../slices/manage-events/thunk";
-
+import CustomButton from "../../components/Button/CustomButton";
+import CommonTable from "../../components/Table/DynamicTable";
+import SearchFilter from "../../components/SearchFilter/SearchFilter";
+import HttpAxios from "../../utils/axiosInstance";
 const columns = [
   {
     field: "organizationName",

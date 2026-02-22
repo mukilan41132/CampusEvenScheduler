@@ -1,7 +1,4 @@
-import CustomTextField from "../../components/Inputfield/CustomTextField";
 import { memo } from "react";
-import "../../styles/create-student/createstudent.css";
-import CustomButton from "../../components/Button/CustomButton";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { Dialog } from "primereact/dialog";
@@ -12,8 +9,10 @@ import {
   registerStudent,
   updateByid,
 } from "../../slices/create-student/thunk";
+import CustomTextField from "../../components/Inputfield/CustomTextField";
 import FileUpload from "../../components/FileUpload/FileUpload";
-
+import CustomButton from "../../components/Button/CustomButton";
+import "../../styles/create-student/createstudent.css";
 export interface Student {
   id: string;
   firstName: string;
@@ -110,7 +109,7 @@ const CreateStudent = memo(
     setStudentState,
   }: CreateStudentProps) => {
     const dispatch = useDispatch<AppDispatch>();
-    // studentState.age = "30";Uncaught TypeError: Cannot assign to read only property 'age' of object '#<Object>'
+
     const registerOrUpdateById = async () => {
       try {
         if (studentState?.id) {

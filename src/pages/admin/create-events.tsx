@@ -1,11 +1,10 @@
 import React, { useState, useCallback, useMemo, memo } from "react";
 import { TextField, MenuItem, Box } from "@mui/material";
-import "../../styles/createEvent/create-event.css";
-import CustomButton from "../../components/Button/CustomButton";
 import { Avatar } from "primereact/avatar";
 import { Dialog } from "primereact/dialog";
 import HttpAxios from "../../utils/axiosInstance";
-
+import CustomButton from "../../components/Button/CustomButton";
+import "../../styles/createEvent/create-event.css";
 const eventTypes = ["Technical", "Cultural", "Sports", "Workshop", "Seminar"];
 
 interface CreateEventProps {
@@ -55,8 +54,7 @@ const CreateEventForm = memo(({ visible, setVisible }: CreateEventProps) => {
 
   const handleSubmit = () => {
     const res = HttpAxios.axios().post("ManageEvents/registerEvent", event);
-    console.log("res",res);
-
+    console.log("res", res);
   };
 
   const footerContent = useMemo(
