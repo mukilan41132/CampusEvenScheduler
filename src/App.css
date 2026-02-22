@@ -1,4 +1,4 @@
-#root {
+/* #root {
   width: 100%;
   height: 100vh;
   display: flex;
@@ -7,4 +7,9 @@
   background: #f5f6fa;
   margin: 0;
   padding: 0;
+} */
+
+body.dark .p-datatable {
+  background-color: #1e1e1e;
+  color: white;
 }

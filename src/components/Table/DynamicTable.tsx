@@ -1,7 +1,7 @@
 import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-
+import "../../styles/Table/table.css";
 interface TableColumn {
   field?: string;
   header: string;
@@ -46,6 +46,7 @@ const DynamicTable: React.FC<CommonTableProps> = ({
       rows={rows}
       loading={loading}
       stripedRows={stripedRows}
+      className="custom-table"
       size={size}
       responsiveLayout={responsiveLayout}
       filters={filters}

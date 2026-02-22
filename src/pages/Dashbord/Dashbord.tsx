@@ -6,20 +6,29 @@ import { useRef, useState, useEffect, useMemo } from "react";
 
 const Dashbord = () => {
   const [count, setCount] = useState(0);
-  // useEffect(() => {
-  //   console.log("Runs every render");
-  // }, [{ a: 1 }]);
+
   const fetchData = () => {
     setCount(count + 1);
   };
+  Math.abs;
+  // console.log((([] as any) + []) as any);
+  console.log(0.6 + 0.5);
+  const num = [1, 2, 3, 4, 5];
+  const output = num.map((val: any) => val > 2);
+  console.log("output", output);
 
-  // console.log("render");
+  const obj1 = {
+    name: "rtg",
+  };
+  const obj2 = {
+    name: "qwe",
+  };
 
-  // useEffect(() => {
-  //   console.log("effect");
-  //   fetchData();
-  // }, [fetchData]);
-  console.log("effect");
+  const result = { ...obj1, ...obj2 };
+
+  console.log("result", result);
+
+  console.log(Math.round(0.1) + Math.round(0.2));
   const obj = useMemo(() => ({ a: 1 }), []);
   useEffect(() => {
     fetchData();
@@ -137,52 +146,3 @@ const Dashbord = () => {
 };
 
 export default Dashbord;
-
-function BugExample() {
-  const [toggle, setToggle] = useState(true);
-  const [num, setNum] = useState(0);
-  const [name, setName] = useState("Mukilan");
-  const [age, setAge] = useState("23");
-  const refvalue = useRef(0);
-
-  function handleClick() {
-    refvalue.current += 1;
-  }
-
-  return toggle ? (
-    <>
-      <h3>Name: {name}</h3>
-      <h3>render ref: {refvalue.current}</h3>
-      <h3>render num: {num}</h3>
-      <button onClick={() => setName("Arun")}>Change Name</button>
-      <button onClick={() => setToggle(false)}>Toggle</button>
-      <button onClick={() => setNum((prev) => prev + 1)}>state add</button>
-      <button onClick={handleClick}>ref add</button>
-    </>
-  ) : (
-    <>
-      <h3>Age: {age}</h3>
-      <button onClick={() => setAge("30")}>Change Age</button>
-      <button onClick={() => setToggle(true)}>Toggle</button>
-    </>
-  );
-}
-
-function Counter() {
-  const [number, setNumber] = useState(0);
-
-  return (
-    <>
-      <h1>{number}</h1>
-      <button
-        onClick={() => {
-          setNumber((prev) => prev + 1);
-          setNumber((prev) => prev + 1);
-          setNumber((prev) => prev + 1);
-        }}
-      >
-        +3
-      </button>
-    </>
-  );
-}

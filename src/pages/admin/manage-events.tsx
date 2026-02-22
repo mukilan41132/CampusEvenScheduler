@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton, Tooltip } from "@mui/material";
@@ -8,117 +9,17 @@ import CustomButton from "../../components/Button/CustomButton";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import CreateEventForm from "./create-events";
 import CommonTable from "../../components/Table/DynamicTable";
-import ActionIcon from "../../components/Button/ActionIconBtn";
-import SearchFilter from "../../components/SearchFilter/SearchFilter";
 
-interface Student {
-  id: string;
-  name: string;
-  email: string;
-  gender: string;
-  age: string;
-  department: string;
-  rollNo: string;
-}
-const studentsdata: Student[] = [
-  {
-    id: "1",
-    name: "Alice Johnson",
-    email: "alice.johnson@example.com",
-    gender: "Female",
-    age: "20",
-    department: "Computer Science",
-    rollNo: "CS101",
-  },
-  {
-    id: "2",
-    name: "Bob Smith",
-    email: "bob.smith@example.com",
-    gender: "Male",
-    age: "21",
-    department: "Mechanical Engineering",
-    rollNo: "ME102",
-  },
-  {
-    id: "3",
-    name: "Charlie Brown",
-    email: "charlie.brown@example.com",
-    gender: "Male",
-    age: "22",
-    department: "Electrical Engineering",
-    rollNo: "EE103",
-  },
-  {
-    id: "4",
-    name: "Diana Prince",
-    email: "diana.prince@example.com",
-    gender: "Female",
-    age: "20",
-    department: "Civil Engineering",
-    rollNo: "CE104",
-  },
-  {
-    id: "5",
-    name: "Ethan Hunt",
-    email: "ethan.hunt@example.com",
-    gender: "Male",
-    age: "23",
-    department: "Computer Science",
-    rollNo: "CS105",
-  },
-  {
-    id: "6",
-    name: "Fiona Gallagher",
-    email: "fiona.gallagher@example.com",
-    gender: "Female",
-    age: "21",
-    department: "Mechanical Engineering",
-    rollNo: "ME106",
-  },
-  {
-    id: "7",
-    name: "George Martin",
-    email: "george.martin@example.com",
-    gender: "Male",
-    age: "22",
-    department: "Electrical Engineering",
-    rollNo: "EE107",
-  },
-  {
-    id: "8",
-    name: "Hannah Baker",
-    email: "hannah.baker@example.com",
-    gender: "Female",
-    age: "20",
-    department: "Civil Engineering",
-    rollNo: "CE108",
-  },
-  {
-    id: "9",
-    name: "Ian Somerhalder",
-    email: "ian.somerhalder@example.com",
-    gender: "Male",
-    age: "23",
-    department: "Computer Science",
-    rollNo: "CS109",
-  },
-  {
-    id: "10",
-    name: "Julia Roberts",
-    email: "julia.roberts@example.com",
-    gender: "Female",
-    age: "21",
-    department: "Mechanical Engineering",
-    rollNo: "ME110",
-  },
-];
+import SearchFilter from "../../components/SearchFilter/SearchFilter";
+import type { AppDispatch } from "../../store/store";
+import { getAllEvents } from "../../slices/manage-events/thunk";
 
 const columns = [
   {
-    field: "name",
-    header: "Name",
+    field: "organizationName",
+    header: "organizationName",
     filter: true,
-    filterPlaceholder: "Search by name",
+    filterPlaceholder: "Search by organizationName",
     style: { minWidth: "12rem" },
   },
   {
@@ -129,38 +30,34 @@ const columns = [
     style: { minWidth: "14rem" },
   },
   {
-    field: "gender",
-    header: "Gender",
+    field: "department",
+    header: "Department",
     style: { minWidth: "8rem" },
   },
   {
-    field: "age",
-    header: "Age",
+    field: "eventType",
+    header: "EventType",
     style: { minWidth: "6rem" },
   },
   {
-    field: "department",
-    header: "Department",
+    field: "venue",
+    header: "Venue",
     filter: true,
-    filterPlaceholder: "Search by department",
+    filterPlaceholder: "Search by venue",
     style: { minWidth: "12rem" },
-  },
-  {
-    field: "rollNo",
-    header: "Roll No",
-    style: { minWidth: "10rem" },
   },
 ];
 const ManageEvents: React.FC = () => {
-  const [students, setStudents] = useState<Student[]>(studentsdata);
-  const [loading, setLoading] = useState(false);
+  const eventsLists = useSelector((state: any) => state?.eventsList);
+  console.log("eventsLists", eventsLists?.events);
+
   const [visible, setVisible] = useState(false);
   const [filters, setFilters] = useState(null);
   const [findByName, setFindByName] = useState<string>("");
   const [findByDepartment, setFindByDepartment] = useState<string>("");
   const [findByRollNo, setFindByRollNo] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false);
-
+  const dispatch = useDispatch<AppDispatch>();
   const popup = useRef<HTMLParagraphElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
@@ -176,24 +73,15 @@ const ManageEvents: React.FC = () => {
       }
     };
   }, [toggle]);
-
-  useEffect(() => {
-    fetchStudents();
-  }, []);
-
-  const fetchStudents = async () => {
-    try {
-      setLoading(true);
-      const res = await HttpAxios.axios().get("/Student/all");
-      setStudents(res.data);
-    } catch (err) {
-      console.error("Error fetching students:", err);
-    } finally {
-      setLoading(false);
-    }
+  const fetchEvents = async () => {
+    dispatch(getAllEvents());
   };
 
-  const handleEdit = (student: Student) => {
+  useEffect(() => {
+    fetchEvents();
+  }, []);
+
+  const handleEdit = (student: any) => {
     setVisible(true);
     console.log("Edit student", student);
   };
@@ -201,7 +89,7 @@ const ManageEvents: React.FC = () => {
   const handleDelete = async (id: string) => {
     try {
       await HttpAxios.axios().delete(`/Student/delete/${id}`);
-      fetchStudents();
+      fetchEvents();
     } catch (err) {
       console.error("Error deleting student:", err);
     }
@@ -210,7 +98,6 @@ const ManageEvents: React.FC = () => {
   return (
     <div className="card">
       <div className="header-btn">
-        <h3>Manage Events </h3>
         {toggle && (
           <SearchFilter
             popup={popup}
@@ -249,13 +136,12 @@ const ManageEvents: React.FC = () => {
         </div>
       </div>
       <CommonTable
-        value={students}
-        loading={loading}
+        value={eventsLists?.events}
+        loading={eventsLists?.loading}
         columns={columns}
         filters={filters}
         onFilter={(e: any) => setFilters(e.filters)}
-        globalFilterFields={["name", "email", "department", "gender", "rollNo"]}
-        header={<h3>Student List</h3>}
+        globalFilterFields={["organizationName"]}
       />
       <CreateEventForm visible={visible} setVisible={setVisible} />
     </div>

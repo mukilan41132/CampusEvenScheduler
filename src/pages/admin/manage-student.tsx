@@ -111,7 +111,6 @@ const ManageStudent: React.FC = () => {
   return (
     <div className="card">
       <div className="header-btn">
-        <h3>Manage Students </h3>
         <div>
           <ActionIcon
             title="Filter"

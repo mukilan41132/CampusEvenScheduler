@@ -1,5 +1,5 @@
 import CustomTextField from "../../components/Inputfield/CustomTextField";
-import { memo, useState } from "react";
+import { memo } from "react";
 import "../../styles/create-student/createstudent.css";
 import CustomButton from "../../components/Button/CustomButton";
 import { useDispatch } from "react-redux";
@@ -262,7 +262,7 @@ const CreateStudent = memo(
         </Dialog>
       </>
     );
-  }
+  },
 );
 
 export default CreateStudent;

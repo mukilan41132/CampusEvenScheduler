@@ -4,6 +4,7 @@ import "../../styles/createEvent/create-event.css";
 import CustomButton from "../../components/Button/CustomButton";
 import { Avatar } from "primereact/avatar";
 import { Dialog } from "primereact/dialog";
+import HttpAxios from "../../utils/axiosInstance";
 
 const eventTypes = ["Technical", "Cultural", "Sports", "Workshop", "Seminar"];
 
@@ -52,9 +53,11 @@ const CreateEventForm = memo(({ visible, setVisible }: CreateEventProps) => {
     setEvent((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  const handleSubmit = useCallback(() => {
-    alert("Event created successfully!");
-  }, [event]);
+  const handleSubmit = () => {
+    const res = HttpAxios.axios().post("ManageEvents/registerEvent", event);
+    console.log("res",res);
+
+  };
 
   const footerContent = useMemo(
     () => (
@@ -75,7 +78,7 @@ const CreateEventForm = memo(({ visible, setVisible }: CreateEventProps) => {
         />
       </div>
     ),
-    [handleSubmit]
+    [handleSubmit],
   );
 
   const headerElement = useMemo(
@@ -90,7 +93,7 @@ const CreateEventForm = memo(({ visible, setVisible }: CreateEventProps) => {
         </span>
       </div>
     ),
-    []
+    [],
   );
 
   return (
