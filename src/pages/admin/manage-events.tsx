@@ -2,59 +2,55 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IconButton, Tooltip } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import CreateEventForm from "./create-events";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CreateEventForm, { type EventFormData } from "./create-events";
 import type { AppDispatch } from "../../store/store";
-import { getAllEvents } from "../../slices/manage-events/thunk";
+import {
+  getAllEvents,
+  register,
+  updateByid,
+} from "../../slices/manage-events/thunk";
 import CustomButton from "../../components/Button/CustomButton";
 import CommonTable from "../../components/Table/DynamicTable";
 import SearchFilter from "../../components/SearchFilter/SearchFilter";
 import HttpAxios from "../../utils/axiosInstance";
-const columns = [
-  {
-    field: "organizationName",
-    header: "organizationName",
-    filter: true,
-    filterPlaceholder: "Search by organizationName",
-    style: { minWidth: "12rem" },
-  },
-  {
-    field: "email",
-    header: "Email",
-    filter: true,
-    filterPlaceholder: "Search by email",
-    style: { minWidth: "14rem" },
-  },
-  {
-    field: "department",
-    header: "Department",
-    style: { minWidth: "8rem" },
-  },
-  {
-    field: "eventType",
-    header: "EventType",
-    style: { minWidth: "6rem" },
-  },
-  {
-    field: "venue",
-    header: "Venue",
-    filter: true,
-    filterPlaceholder: "Search by venue",
-    style: { minWidth: "12rem" },
-  },
-];
+import ActionColumn from "../../components/ActionBody/actionBodyTemplate";
+import NoData from "../../components/NORecordFound/NoData";
+const initialEvents = {
+  id: "",
+  eventName: "",
+  eventType: "",
+  description: "",
+  date: "",
+  startTime: "",
+  endTime: "",
+  venue: "",
+  department: "",
+  organizerName: "",
+  contactEmail: "",
+  contactNumber: "",
+  maxParticipants: "",
+  registrationFee: "",
+  status: "Upcoming",
+};
 const ManageEvents: React.FC = () => {
-  const eventsLists = useSelector((state: any) => state?.eventsList);
-  console.log("eventsLists", eventsLists?.events);
+  const dispatch = useDispatch<AppDispatch>();
+  const popup = useRef<HTMLParagraphElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(10);
+  const [loading, setLoading] = useState(false);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [visible, setVisible] = useState(false);
   const [filters, setFilters] = useState(null);
   const [findByName, setFindByName] = useState<string>("");
   const [findByDepartment, setFindByDepartment] = useState<string>("");
   const [findByRollNo, setFindByRollNo] = useState<string>("");
   const [toggle, setToggle] = useState<boolean>(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const popup = useRef<HTMLParagraphElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const [event, setEvent] = useState<EventFormData>(initialEvents);
+  const [eventsList, setEventList] = useState([]);
 
   useEffect(() => {
     if (popup.current == null || buttonRef.current == null) return;
@@ -68,28 +64,122 @@ const ManageEvents: React.FC = () => {
       }
     };
   }, [toggle]);
-  const fetchEvents = async () => {
-    dispatch(getAllEvents());
+
+  const fetchStudents = async (page: number, limit: number) => {
+    setLoading(true);
+    try {
+      const res = await HttpAxios.axios().get(
+        `ManageEvents/getAllEvents?page=${page}&limit=${limit}`,
+      );
+      setEventList(res?.data?.content);
+      setTotalRecords(res?.data?.totalElements);
+    } catch (error) {
+      console.error("Failed to fetch students:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    fetchStudents(0, rows);
+  }, []);
+  const onPage = (event: any) => {
+    const page = event?.page;
+    const limit = event?.rows;
+    setFirst(event?.first);
+    setRows(limit);
+
+    fetchStudents(page, limit);
   };
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const handleEdit = (student: any) => {
+  const columns = [
+    {
+      field: "organizationName",
+      header: "organizationName",
+      filter: true,
+      filterPlaceholder: "Search by organizationName",
+      style: { minWidth: "12rem" },
+    },
+    {
+      field: "email",
+      header: "Email",
+      filter: true,
+      filterPlaceholder: "Search by email",
+      style: { minWidth: "14rem" },
+    },
+    {
+      field: "department",
+      header: "Department",
+      style: { minWidth: "8rem" },
+    },
+    {
+      field: "eventType",
+      header: "EventType",
+      style: { minWidth: "6rem" },
+    },
+    {
+      field: "venue",
+      header: "Venue",
+      filter: true,
+      filterPlaceholder: "Search by venue",
+      style: { minWidth: "12rem" },
+    },
+    {
+      header: "Actions",
+      body: (row: any) => actionBodyTemplate(row),
+      style: { width: "8rem" },
+    },
+  ];
+  const actionBodyTemplate = (rowData: EventFormData) => (
+    <ActionColumn
+      rowData={rowData}
+      actions={[
+        {
+          title: "Edit",
+          icon: <EditIcon />,
+          color: "warning",
+          onClick: handleEdit,
+        },
+        {
+          title: "Delete",
+          icon: <DeleteIcon />,
+          color: "error",
+          onClick: (data) => handleDelete(data.id),
+        },
+      ]}
+    />
+  );
+  const handleEdit = (row: any) => {
     setVisible(true);
-    console.log("Edit student", student);
+    setEvent(row);
   };
 
   const handleDelete = async (id: string) => {
     try {
-      await HttpAxios.axios().delete(`/Student/delete/${id}`);
-      fetchEvents();
+      await HttpAxios.axios().delete(`/ManageEvents/deleteEventById/${id}`);
+      fetchStudents(0, rows);
     } catch (err) {
       console.error("Error deleting student:", err);
     }
   };
 
+  const registerOrUpdateById = async () => {
+    try {
+      if (event?.id) {
+        await dispatch(updateByid(event)).unwrap();
+      } else {
+        await dispatch(register(event)).unwrap();
+      }
+
+      fetchStudents(0, rows);
+    } catch (error) {
+      console.error("Operation failed", error);
+    }
+  };
+
+  const clearState = () => {
+    setEvent(initialEvents);
+    setVisible(false);
+  };
   return (
     <div className="card">
       <div className="header-btn">
@@ -126,19 +216,34 @@ const ManageEvents: React.FC = () => {
             text={"Create Events"}
             onClick={() => {
               setVisible(true);
+              setEvent(initialEvents);
             }}
           />
         </div>
       </div>
+
       <CommonTable
-        value={eventsLists?.events}
-        loading={eventsLists?.loading}
+        value={eventsList}
+        loading={loading}
         columns={columns}
         filters={filters}
+        emptyMessage={<NoData message="No Data Found" />}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
+        onPage={onPage}
         onFilter={(e: any) => setFilters(e.filters)}
         globalFilterFields={["organizationName"]}
       />
-      <CreateEventForm visible={visible} setVisible={setVisible} />
+
+      <CreateEventForm
+        visible={visible}
+        setVisible={setVisible}
+        event={event}
+        registerOrUpdateById={registerOrUpdateById}
+        clearState={clearState}
+        setEvent={setEvent}
+      />
     </div>
   );
 };

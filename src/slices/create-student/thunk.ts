@@ -4,14 +4,19 @@ import type { Student } from "./studentSlice";
 
 export const getAllStudents = createAsyncThunk(
   "students/getAll",
-  async (_, { rejectWithValue }) => {
+  async (
+    { page, limit }: { page?: number; limit?: number },
+    { rejectWithValue },
+  ) => {
     try {
-      const response = await HttpAxios.axios().get("/Student/getAll");
+      const response = await HttpAxios.axios().get(
+        `/Student/getAll?page=${page}&limit=${limit}`,
+      );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const registerStudent = createAsyncThunk(
@@ -20,13 +25,13 @@ export const registerStudent = createAsyncThunk(
     try {
       const response = await HttpAxios.axios().post(
         "/Student/register",
-        studentData
+        studentData,
       );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );
 
 export const updateByid = createAsyncThunk(
@@ -35,11 +40,11 @@ export const updateByid = createAsyncThunk(
     try {
       const response = await HttpAxios.axios().put(
         "/Student/updateStudentById",
-        studentData
+        studentData,
       );
       return response.data;
     } catch (error: any) {
       return rejectWithValue(error.response?.data || error.message);
     }
-  }
+  },
 );

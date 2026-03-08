@@ -8,56 +8,76 @@ import CreateStudent, {
   type Student,
 } from "./create-student";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { useDispatch, useSelector } from "react-redux";
-import type { AppDispatch } from "../../store/store";
-import { getAllStudents } from "../../slices/create-student/thunk";
 import DynamicTable from "../../components/Table/DynamicTable";
 import ActionIcon from "../../components/Button/ActionIconBtn";
+import ActionColumn from "../../components/ActionBody/actionBodyTemplate";
+import { registerStudent, updateByid } from "../../slices/create-student/thunk";
+import type { AppDispatch } from "../../store/store";
+import { useDispatch } from "react-redux";
+import NoData from "../../components/NORecordFound/NoData";
 
 const ManageStudent: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
   const [loading, setLoading] = useState(false);
   const [visible, setVisible] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
-  const records = useSelector((state: any) => state?.students);
+  const [students, setStudents] = useState([]);
   const [filters, setFilters] = useState(null);
-
+  const [first, setFirst] = useState(0);
+  const [rows, setRows] = useState(10);
+  const [totalRecords, setTotalRecords] = useState(0);
   const [studentState, setStudentState] =
     useState<Student>(initialStudentState);
-  useEffect(() => {
-    fetchStudents();
-  }, [dispatch]);
 
-  const fetchStudents = async () => {
+  const fetchStudents = async (page: number, limit: number) => {
+    setLoading(true);
+
     try {
-      await dispatch(getAllStudents());
-    } catch (err) {
-      console.error("Error fetching students:", err);
+      const res = await HttpAxios.axios().get(
+        `Student/getAll?page=${page}&limit=${limit}`,
+      );
+
+      setStudents(res?.data?.content);
+      setTotalRecords(res?.data?.totalElements);
+    } catch (error) {
+      console.error("Failed to fetch students:", error);
     } finally {
+      setLoading(false);
     }
   };
 
-  const actionBodyTemplate = (rowData: Student) => {
-    return (
-      <div style={{ display: "flex", gap: "8px" }}>
-        <ActionIcon
-          title="Filter"
-          icon={<EditIcon />}
-          color="warning"
-          size="small"
-          sx={{ marginRight: "15px" }}
-          onClick={() => handleEdit(rowData)}
-        />
-        <ActionIcon
-          title="Filter"
-          icon={<DeleteIcon />}
-          color="error"
-          size="small"
-          sx={{ marginRight: "15px" }}
-          onClick={() => handleDelete(rowData?.id)}
-        />
-      </div>
-    );
+  useEffect(() => {
+    fetchStudents(0, rows);
+  }, []);
+
+  const onPage = (event: any) => {
+    const page = event.page;
+    const limit = event.rows;
+
+    setFirst(event.first);
+    setRows(limit);
+
+    fetchStudents(page, limit);
   };
+
+  const actionBodyTemplate = (rowData: Student) => (
+    <ActionColumn
+      rowData={rowData}
+      actions={[
+        {
+          title: "Edit",
+          icon: <EditIcon />,
+          color: "warning",
+          onClick: handleEdit,
+        },
+        {
+          title: "Delete",
+          icon: <DeleteIcon />,
+          color: "error",
+          onClick: (data) => handleDelete(data.id),
+        },
+      ]}
+    />
+  );
   const columns = [
     {
       header: "S.No",
@@ -101,11 +121,29 @@ const ManageStudent: React.FC = () => {
 
   const handleDelete = async (id: string) => {
     try {
-      await HttpAxios.axios().delete(`/Student/delete/${id}`);
-      fetchStudents();
+      await HttpAxios.axios().delete(`/Student/deleteStudentById/${id}`);
+      fetchStudents(0, rows);
     } catch (err) {
       console.error("Error deleting student:", err);
     }
+  };
+  const registerOrUpdateById = async () => {
+    try {
+      if (studentState?.id) {
+        await dispatch(updateByid(studentState)).unwrap();
+      } else {
+        await dispatch(registerStudent(studentState)).unwrap();
+      }
+
+      fetchStudents(0, rows);
+    } catch (error) {
+      console.error("Operation failed", error);
+    }
+  };
+
+  const clearState = () => {
+    setStudentState(initialStudentState);
+    setVisible(false);
   };
 
   return (
@@ -129,17 +167,24 @@ const ManageStudent: React.FC = () => {
         </div>
       </div>
       <DynamicTable
-        value={records?.students || []}
+        value={students}
         loading={loading}
+        emptyMessage={<NoData message="No Data Found" />}
         columns={columns}
+        first={first}
+        rows={rows}
+        totalRecords={totalRecords}
+        onPage={onPage}
         filters={filters}
         onFilter={(e: any) => setFilters(e.filters)}
         globalFilterFields={["firstName", "rollNo", "department", "gender"]}
       />
+
       <CreateStudent
         visible={visible}
-        setVisible={setVisible}
         studentState={studentState}
+        registerOrUpdateById={registerOrUpdateById}
+        clearState={clearState}
         setStudentState={setStudentState}
       />
     </div>

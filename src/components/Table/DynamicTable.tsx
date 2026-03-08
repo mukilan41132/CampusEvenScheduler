@@ -1,5 +1,5 @@
 import React from "react";
-import { DataTable } from "primereact/datatable";
+import { DataTable, type DataTablePageEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import "../../styles/Table/table.css";
 interface TableColumn {
@@ -16,13 +16,17 @@ interface CommonTableProps {
   columns: TableColumn[];
   loading?: boolean;
   filters?: any;
+  onPage?: (event: DataTablePageEvent) => void;
   onFilter?: (e: any) => void;
   globalFilterFields?: string[];
   header?: React.ReactNode;
+  totalRecords?: number;
+  first?: number;
   rows?: number;
   stripedRows?: boolean;
   responsiveLayout?: "scroll" | "stack";
   size?: "small" | "large" | "normal";
+  emptyMessage?: any;
 }
 
 const DynamicTable: React.FC<CommonTableProps> = ({
@@ -33,10 +37,14 @@ const DynamicTable: React.FC<CommonTableProps> = ({
   onFilter,
   globalFilterFields = [],
   header,
+  totalRecords = 0,
+  first = 0,
+  onPage,
   rows = 10,
   stripedRows = true,
   responsiveLayout = "scroll",
   size = "small",
+  emptyMessage,
   ...rest
 }) => {
   return (
@@ -44,15 +52,17 @@ const DynamicTable: React.FC<CommonTableProps> = ({
       value={value}
       paginator
       rows={rows}
+      first={first}
+      lazy
+      totalRecords={totalRecords}
       loading={loading}
+      onPage={onPage}
       stripedRows={stripedRows}
       className="custom-table"
       size={size}
       responsiveLayout={responsiveLayout}
-      filters={filters}
-      globalFilterFields={globalFilterFields}
+      emptyMessage={emptyMessage}
       header={header}
-      onFilter={onFilter}
       rowsPerPageOptions={[5, 10, 25, 50]}
       {...rest}
     >

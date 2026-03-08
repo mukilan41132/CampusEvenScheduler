@@ -1,14 +1,8 @@
 import { memo } from "react";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "../../store/store";
 import { Dialog } from "primereact/dialog";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
-import {
-  getAllStudents,
-  registerStudent,
-  updateByid,
-} from "../../slices/create-student/thunk";
+ 
 import CustomTextField from "../../components/Inputfield/CustomTextField";
 import FileUpload from "../../components/FileUpload/FileUpload";
 import CustomButton from "../../components/Button/CustomButton";
@@ -28,8 +22,8 @@ export interface Student {
 }
 interface CreateStudentProps {
   visible: boolean;
-  setVisible: (value: boolean) => void;
-
+  registerOrUpdateById: () => Promise<void>;
+  clearState: () => void;
   studentState: Student;
   setStudentState: React.Dispatch<React.SetStateAction<Student>>;
 }
@@ -104,30 +98,11 @@ export const initialStudentState = {
 const CreateStudent = memo(
   ({
     visible,
-    setVisible,
     studentState,
     setStudentState,
+    registerOrUpdateById,
+    clearState,
   }: CreateStudentProps) => {
-    const dispatch = useDispatch<AppDispatch>();
-
-    const registerOrUpdateById = async () => {
-      try {
-        if (studentState?.id) {
-          await dispatch(updateByid(studentState)).unwrap();
-        } else {
-          await dispatch(registerStudent(studentState)).unwrap();
-        }
-
-        dispatch(getAllStudents());
-      } catch (error) {
-        console.error("Operation failed", error);
-      }
-    };
-
-    const clearState = () => {
-      setStudentState(initialStudentState);
-      setVisible(false);
-    };
     const footerContent = (
       <div className="footer-btn">
         <CustomButton
