@@ -3,7 +3,8 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const token = sessionStorage.getItem("token");
-  return token ? <>{children}</> : <Navigate to="/auth" replace />;
+
+  return token ? <>{children}</> : <Navigate to="/" replace />;
 };
 
 export default ProtectedRoute;

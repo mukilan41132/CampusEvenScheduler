@@ -5,7 +5,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import { routesConfig } from "./routes/routes";
 import { ThemeContext } from "./context/theme";
-
+import Error404Wrapper from "./components/Error/404Error";
 const AppRoutes: React.FC = () => {
   const { theme } = useContext(ThemeContext);
   useEffect(() => {
@@ -27,9 +27,9 @@ const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/auth" element={<Authindex />} />
+        <Route path="/" element={<Authindex />} />
 
-        {routesConfig.map(({ path, element, role }) => (
+        {routesConfig.map(({ path, element }) => (
           <Route
             key={path}
             path={path}
@@ -41,7 +41,7 @@ const AppRoutes: React.FC = () => {
           />
         ))}
 
-        <Route path="*" element={<Authindex />} />
+        <Route path="*" element={<Error404Wrapper />} />
       </Routes>
     </BrowserRouter>
   );

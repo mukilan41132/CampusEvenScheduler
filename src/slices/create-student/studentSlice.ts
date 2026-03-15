@@ -12,6 +12,7 @@ export interface Student {
   age: string;
   department: string;
   rollNo: string;
+  profile:any;
 }
 
 export interface StudentState {

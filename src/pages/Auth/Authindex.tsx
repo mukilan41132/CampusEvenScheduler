@@ -44,7 +44,7 @@ const Authindex = () => {
           password: "",
           email: "",
         }}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           setError("");
 
           try {
@@ -53,7 +53,8 @@ const Authindex = () => {
               password: values.password,
             };
 
-            dispatch(loginAuth(auth));
+            await dispatch(loginAuth(auth)).unwrap();
+
             navigate("/dashboard");
           } catch (err: any) {
             setError(err || "Invalid email or password");

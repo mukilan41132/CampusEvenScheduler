@@ -1,14 +1,16 @@
 import { memo } from "react";
-import { Dialog } from "primereact/dialog";
+import { Drawer, Box, Typography, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";
- 
+
 import CustomTextField from "../../components/Inputfield/CustomTextField";
 import FileUpload from "../../components/FileUpload/FileUpload";
 import CustomButton from "../../components/Button/CustomButton";
 import "../../styles/create-student/createstudent.css";
 export interface Student {
   id: string;
+  profile: any;
   firstName: string;
   lastName: string;
   email: string;
@@ -83,6 +85,7 @@ const departments = [
   "Graphic Design",
 ];
 export const initialStudentState = {
+  profile: "",
   id: "",
   firstName: "",
   lastName: "",
@@ -103,137 +106,190 @@ const CreateStudent = memo(
     registerOrUpdateById,
     clearState,
   }: CreateStudentProps) => {
-    const footerContent = (
-      <div className="footer-btn">
-        <CustomButton
-          size="small"
-          color="primary"
-          onClick={clearState}
-          type="submit"
-          text={"Cancel"}
-        />
-        <CustomButton
-          size="small"
-          onClick={() => registerOrUpdateById()}
-          color="secondary"
-          type="submit"
-          text={"Register"}
-        />
-      </div>
-    );
+    const stateSetter = (name: string, value: any) => {
+      setStudentState((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    };
     const headerElement = (
-      <div className="inline-flex align-items-center justify-content-center gap-2">
-        <FileUpload />
-        <span className="font-bold white-space-nowrap">Amy Elsner</span>
+      <div className="header_container">
+        <FileUpload
+          name="profile"
+          value={studentState.profile}
+          stateSetter={stateSetter}
+        />
+        <span>Amy Elsner</span>
       </div>
     );
+
     return (
       <>
-        <Dialog
-          visible={visible}
-          modal
-          header={headerElement}
-          footer={footerContent}
-          style={{ width: "50rem" }}
-          onHide={() => {
-            if (!visible) return;
-            clearState();
-          }}
-        >
-          <form className="students-container">
-            <CustomTextField
-              label={"First Name"}
-              value={studentState.firstName}
-              onChange={(e) =>
-                setStudentState({
-                  ...studentState,
-                  firstName: e.target.value,
-                })
-              }
-            />
-            <CustomTextField
-              label={"Last Name"}
-              value={studentState.lastName}
-              onChange={(e) =>
-                setStudentState({
-                  ...studentState,
-                  lastName: e.target.value,
-                })
-              }
-            />
-            <CustomTextField
-              label={"Email"}
-              value={studentState.email}
-              onChange={(e) =>
-                setStudentState({ ...studentState, email: e.target.value })
-              }
-            />
-            <CustomTextField
-              label={"Contact No"}
-              value={studentState.phoneNo}
-              onChange={(e) =>
-                setStudentState({ ...studentState, phoneNo: e.target.value })
-              }
-            />
-            <Autocomplete
-              disablePortal
-              size="small"
-              options={["Male", "Female", "Other"]}
-              value={studentState.gender || ""}
-              onChange={(_, value: any) =>
-                setStudentState({ ...studentState, gender: value })
-              }
-              renderInput={(params) => <TextField {...params} label="Gender" />}
-            />
+        <Drawer anchor="right" open={visible} onClose={clearState}>
+          <Box
+            sx={{
+              width: { xs: "100vw", sm: 450 },
+              p: '12px',
+              marginTop: "15%",
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 2,
+              }}
+            >
+              {headerElement}
 
-            <CustomTextField
-              label={"Age"}
-              value={studentState.age}
-              onChange={(e) =>
-                setStudentState({ ...studentState, age: e.target.value })
-              }
-            />
-            <Autocomplete
-              disablePortal
-              size="small"
-              options={departments}
-              value={studentState.department || ""}
-              onChange={(_, value: any) =>
-                setStudentState({ ...studentState, department: value })
-              }
-              renderInput={(params) => (
-                <TextField {...params} label="Department" />
-              )}
-            />
-            <CustomTextField
-              label={"RollNo"}
-              value={studentState.rollNo}
-              onChange={(e) =>
-                setStudentState({ ...studentState, rollNo: e.target.value })
-              }
-            />
-            <CustomTextField
-              label={"Semester"}
-              value={studentState.semester}
-              onChange={(e) =>
-                setStudentState({
-                  ...studentState,
-                  semester: e.target.value,
-                })
-              }
-            />
-            <CustomTextField
-              label={"YearOfStudy"}
-              value={studentState.yearOfStudy}
-              onChange={(e) =>
-                setStudentState({
-                  ...studentState,
-                  yearOfStudy: e.target.value,
-                })
-              }
-            />
-          </form>
-        </Dialog>
+              <IconButton onClick={clearState}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+
+            <form className="students-container">
+              <CustomTextField
+                label="First Name"
+                value={studentState.firstName}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    firstName: e.target.value,
+                  })
+                }
+              />
+
+              <CustomTextField
+                label="Last Name"
+                value={studentState.lastName}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    lastName: e.target.value,
+                  })
+                }
+              />
+
+              <CustomTextField
+                label="Email"
+                value={studentState.email}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    email: e.target.value,
+                  })
+                }
+              />
+
+              <CustomTextField
+                label="Contact No"
+                value={studentState.phoneNo}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    phoneNo: e.target.value,
+                  })
+                }
+              />
+
+              <Autocomplete
+                disablePortal
+                freeSolo
+                size="small"
+                options={["Male", "Female", "Other"]}
+                value={studentState.gender || ""}
+                onChange={(_, value: any) =>
+                  setStudentState({
+                    ...studentState,
+                    gender: value,
+                  })
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Gender" />
+                )}
+              />
+
+              <CustomTextField
+                label="Age"
+                value={studentState.age}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    age: e.target.value,
+                  })
+                }
+              />
+
+              <Autocomplete
+                disablePortal
+                freeSolo
+                size="small"
+                options={departments}
+                value={studentState.department || ""}
+                onChange={(_, value: any) =>
+                  setStudentState({
+                    ...studentState,
+                    department: value,
+                  })
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Department" />
+                )}
+              />
+
+              <CustomTextField
+                label="Roll No"
+                value={studentState.rollNo}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    rollNo: e.target.value,
+                  })
+                }
+              />
+
+              <CustomTextField
+                label="Semester"
+                value={studentState.semester}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    semester: e.target.value,
+                  })
+                }
+              />
+
+              <CustomTextField
+                label="Year Of Study"
+                value={studentState.yearOfStudy}
+                onChange={(e) =>
+                  setStudentState({
+                    ...studentState,
+                    yearOfStudy: e.target.value,
+                  })
+                }
+              />
+
+              <Box className="drawer-footer">
+                <CustomButton
+                  size="small"
+                  color="primary"
+                  onClick={clearState}
+                  type="submit"
+                  text={"Cancel"}
+                />
+                <CustomButton
+                  size="small"
+                  onClick={registerOrUpdateById}
+                  color="secondary"
+                  type="submit"
+                  text={"Register"}
+                />
+              </Box>
+            </form>
+          </Box>
+        </Drawer>
       </>
     );
   },

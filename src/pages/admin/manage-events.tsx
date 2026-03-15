@@ -1,16 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { IconButton, Tooltip } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateEventForm, { type EventFormData } from "./create-events";
 import type { AppDispatch } from "../../store/store";
-import {
-  getAllEvents,
-  register,
-  updateByid,
-} from "../../slices/manage-events/thunk";
+import { register, updateByid } from "../../slices/manage-events/thunk";
 import CustomButton from "../../components/Button/CustomButton";
 import CommonTable from "../../components/Table/DynamicTable";
 import SearchFilter from "../../components/SearchFilter/SearchFilter";

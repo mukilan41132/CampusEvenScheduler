@@ -12,7 +12,7 @@ class HttpAxios {
     if (!HttpAxios.instance) {
       HttpAxios.instance = axios.create({
         baseURL: API_URL,
-        headers: { "Content-Type": "application/json" },
+        
       });
 
       HttpAxios.instance.interceptors.request.use((config) => {

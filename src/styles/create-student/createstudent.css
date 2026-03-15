@@ -1,6 +1,6 @@
 .students-container {
   display: grid;
-  grid-template-columns: auto auto auto;
+
   margin-top: 10px;
   gap: 10px;
 }
@@ -16,4 +16,31 @@
   align-items: center;
   justify-content: flex-end;
   margin-bottom: 6px;
+}
+.drawer-footer {
+  position: fixed;
+  bottom: 0;
+  background: #fff;
+  padding: 16px;
+  display: flex;
+  gap: 16px;
+  justify-content: flex-end;
+  width: -webkit-fill-available;
+}
+@media only screen and (max-width: 600px) {
+  .students-container {
+    grid-template-columns: auto;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .students-container {
+    grid-template-columns: auto;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .students-container {
+    grid-template-columns: auto auto auto;
+  }
 }

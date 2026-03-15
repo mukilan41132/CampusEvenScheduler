@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo, memo } from "react";
-import { TextField, MenuItem, Box } from "@mui/material";
+import { TextField, MenuItem } from "@mui/material";
 import { Avatar } from "primereact/avatar";
-import { Dialog } from "primereact/dialog";
+import { Drawer, Box, Typography, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 import CustomButton from "../../components/Button/CustomButton";
 import "../../styles/createEvent/create-event.css";
+import "../../styles/create-student/createstudent.css";
 const eventTypes = ["Technical", "Cultural", "Sports", "Workshop", "Seminar"];
 
 interface CreateEventProps {
@@ -85,173 +87,204 @@ const CreateEventForm = memo(
     );
 
     return (
-      <Dialog
-        header={headerElement}
-        footer={footerContent}
-        visible={visible}
-        onHide={() => visible && setVisible(false)}
-        style={{ width: "50vw", maxHeight: "80vh", overflowY: "auto" }}
-        breakpoints={{ "960px": "75vw", "641px": "100vw" }}
-      >
-        <Box className="form-column">
-          <TextField
-            label="Event Name"
-            name="eventName"
-            size="small"
-            value={event.eventName}
-            onChange={handleChange}
-            fullWidth
-            className="form-control"
-          />
+      <Drawer anchor="right" open={visible} onClose={clearState}>
+        <Box
+          sx={{
+            width: { xs: "100vw", sm: 450 },
+            p: "12px",
+            marginTop: "15%",
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 2,
+            }}
+          >
+            {headerElement}
 
-          <Box className="form-row">
-            <TextField
-              select
-              label="Event Type"
-              name="eventType"
-              value={event.eventType}
-              onChange={handleChange}
-              fullWidth
-              size="small"
-              className="form-control"
-            >
-              {eventTypes.map((type) => (
-                <MenuItem key={type} value={type}>
-                  {type}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              label="Department"
-              name="department"
-              size="small"
-              value={event.department}
-              onChange={handleChange}
-              fullWidth
-              className="form-control"
-            />
+            <IconButton onClick={clearState}>
+              <CloseIcon />
+            </IconButton>
           </Box>
-
-          <TextField
-            label="Description"
-            name="description"
-            value={event.description}
-            size="small"
-            onChange={handleChange}
-            fullWidth
-            multiline
-            rows={3}
-            className="form-control"
-          />
-
-          <Box className="form-row">
+          <Box className="form-column">
             <TextField
-              type="date"
-              label="Date"
-              name="date"
+              label="Event Name"
+              name="eventName"
               size="small"
-              value={event.date}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              className="form-control"
-            />
-
-            <TextField
-              type="time"
-              label="Start Time"
-              name="startTime"
-              size="small"
-              value={event.startTime}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              className="form-control"
-            />
-
-            <TextField
-              type="time"
-              label="End Time"
-              name="endTime"
-              size="small"
-              value={event.endTime}
-              onChange={handleChange}
-              InputLabelProps={{ shrink: true }}
-              fullWidth
-              className="form-control"
-            />
-          </Box>
-
-          <Box className="form-row">
-            <TextField
-              label="Venue"
-              name="venue"
-              size="small"
-              value={event.venue}
+              value={event.eventName}
               onChange={handleChange}
               fullWidth
               className="form-control"
             />
 
-            <TextField
-              label="Organizer Name"
-              name="organizerName"
-              size="small"
-              value={event.organizerName}
-              onChange={handleChange}
-              fullWidth
-              className="form-control"
-            />
-          </Box>
+            <Box className="form-row">
+              <TextField
+                select
+                label="Event Type"
+                name="eventType"
+                value={event.eventType}
+                onChange={handleChange}
+                fullWidth
+                size="small"
+                className="form-control"
+              >
+                {eventTypes.map((type) => (
+                  <MenuItem key={type} value={type}>
+                    {type}
+                  </MenuItem>
+                ))}
+              </TextField>
 
-          <Box className="form-row">
-            <TextField
-              label="Contact Email"
-              name="contactEmail"
-              size="small"
-              value={event.contactEmail}
-              onChange={handleChange}
-              fullWidth
-              className="form-control"
-            />
+              <TextField
+                label="Department"
+                name="department"
+                size="small"
+                value={event.department}
+                onChange={handleChange}
+                fullWidth
+                className="form-control"
+              />
+            </Box>
 
             <TextField
-              label="Contact Number"
-              name="contactNumber"
+              label="Description"
+              name="description"
+              value={event.description}
               size="small"
-              value={event.contactNumber}
               onChange={handleChange}
               fullWidth
-              className="form-control"
-            />
-          </Box>
-
-          <Box className="form-row">
-            <TextField
-              type="number"
-              label="Max Participants"
-              name="maxParticipants"
-              size="small"
-              value={event.maxParticipants}
-              onChange={handleChange}
-              fullWidth
+              multiline
+              rows={3}
               className="form-control"
             />
 
-            <TextField
-              type="number"
-              label="Registration Fee (₹)"
-              name="registrationFee"
-              size="small"
-              value={event.registrationFee}
-              onChange={handleChange}
-              fullWidth
-              className="form-control"
-            />
+            <Box className="form-row">
+              <TextField
+                type="date"
+                label="Date"
+                name="date"
+                size="small"
+                value={event.date}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                className="form-control"
+              />
+
+              <TextField
+                type="time"
+                label="Start Time"
+                name="startTime"
+                size="small"
+                value={event.startTime}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                className="form-control"
+              />
+
+              <TextField
+                type="time"
+                label="End Time"
+                name="endTime"
+                size="small"
+                value={event.endTime}
+                onChange={handleChange}
+                InputLabelProps={{ shrink: true }}
+                fullWidth
+                className="form-control"
+              />
+            </Box>
+
+            <Box className="form-row">
+              <TextField
+                label="Venue"
+                name="venue"
+                size="small"
+                value={event.venue}
+                onChange={handleChange}
+                fullWidth
+                className="form-control"
+              />
+
+              <TextField
+                label="Organizer Name"
+                name="organizerName"
+                size="small"
+                value={event.organizerName}
+                onChange={handleChange}
+                fullWidth
+                className="form-control"
+              />
+            </Box>
+
+            <Box className="form-row">
+              <TextField
+                label="Contact Email"
+                name="contactEmail"
+                size="small"
+                value={event.contactEmail}
+                onChange={handleChange}
+                fullWidth
+                className="form-control"
+              />
+
+              <TextField
+                label="Contact Number"
+                name="contactNumber"
+                size="small"
+                value={event.contactNumber}
+                onChange={handleChange}
+                fullWidth
+                className="form-control"
+              />
+            </Box>
+
+            <Box className="form-row">
+              <TextField
+                type="number"
+                label="Max Participants"
+                name="maxParticipants"
+                size="small"
+                value={event.maxParticipants}
+                onChange={handleChange}
+                fullWidth
+                className="form-control"
+              />
+
+              <TextField
+                type="number"
+                label="Registration Fee (₹)"
+                name="registrationFee"
+                size="small"
+                value={event.registrationFee}
+                onChange={handleChange}
+                fullWidth
+                className="form-control"
+              />
+            </Box>
+            <Box className="drawer-footer">
+              <CustomButton
+                size="small"
+                color="primary"
+                onClick={clearState}
+                type="submit"
+                text={"Cancel"}
+              />
+              <CustomButton
+                size="small"
+                onClick={registerOrUpdateById}
+                color="secondary"
+                type="submit"
+                text={"Register"}
+              />
+            </Box>
           </Box>
         </Box>
-      </Dialog>
+      </Drawer>
     );
   },
 );
