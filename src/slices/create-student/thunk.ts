@@ -23,9 +23,22 @@ export const registerStudent = createAsyncThunk(
   "students/register",
   async (studentData: Student, { rejectWithValue }) => {
     try {
+      const { profile, ...payload } = studentData;
+      const formData = new FormData();
+
+      formData.append(
+        "students",
+        new Blob([JSON.stringify(payload)], {
+          type: "application/json",
+        }),
+      );
+
+      if (profile instanceof File) {
+        formData.append("file", profile);
+      }
       const response = await HttpAxios.axios().post(
         "/Student/register",
-        studentData,
+        formData,
       );
       return response.data;
     } catch (error: any) {

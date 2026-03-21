@@ -1,7 +1,8 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import placeHolderProfile from "../../assets/user-alt.svg";
-const API_URL = import.meta.env.VITE_API_HOST;
 import "../../styles/FileUpload/FileUpload.css";
+
+const API_URL = import.meta.env.VITE_API_HOST;
 interface FileUploadProps {
   name: string;
   value?: string;
@@ -24,13 +25,19 @@ const FileUpload = ({ name, value, stateSetter }: FileUploadProps) => {
 
       setPreview(url);
 
- 
       stateSetter(name, file);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
   const imageSrc =
     preview || (value ? `${API_URL}${value}` : placeHolderProfile);
-
+  console.log("preview", preview);
   return (
     <div>
       <div onClick={handleProfileChange}>

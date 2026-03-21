@@ -52,7 +52,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
 
   return (
     <Box>
-      <AppBar position="fixed" sx={{ zIndex: 1201 }}>
+      <AppBar position="fixed" sx={{ zIndex: 1201,backgroundColor:"#0f6817" }}>
         <Toolbar>
           <IconButton color="inherit" edge="start" onClick={toggleDrawer}>
             <MenuIcon />

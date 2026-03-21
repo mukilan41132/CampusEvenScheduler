@@ -119,7 +119,7 @@ const CreateStudent = memo(
           value={studentState.profile}
           stateSetter={stateSetter}
         />
-        <span>Amy Elsner</span>
+        <span>{studentState?.firstName}</span>
       </div>
     );
 
@@ -129,7 +129,7 @@ const CreateStudent = memo(
           <Box
             sx={{
               width: { xs: "100vw", sm: 450 },
-              p: '12px',
+              p: "12px",
               marginTop: "15%",
             }}
           >
@@ -276,15 +276,13 @@ const CreateStudent = memo(
                   size="small"
                   color="primary"
                   onClick={clearState}
-                  type="submit"
                   text={"Cancel"}
                 />
                 <CustomButton
                   size="small"
                   onClick={registerOrUpdateById}
                   color="secondary"
-                  type="submit"
-                  text={"Register"}
+                  text={studentState?.id ? "Update" : "Register"}
                 />
               </Box>
             </form>

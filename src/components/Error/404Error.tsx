@@ -10,12 +10,10 @@ interface Error404WrapperProps {
 const Error404Wrapper = ({ children }: Error404WrapperProps) => {
   const navigate = useNavigate();
 
-  // If children exist, render them normally
   if (children) {
     return <>{children}</>;
   }
 
-  // Otherwise, show 404 page
   return (
     <div
       className="container"

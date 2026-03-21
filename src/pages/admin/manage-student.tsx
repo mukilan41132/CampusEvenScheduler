@@ -127,6 +127,7 @@ const ManageStudent: React.FC = () => {
       console.error("Error deleting student:", err);
     }
   };
+  console.log("studentState",studentState);
   const registerOrUpdateById = async () => {
     try {
       if (studentState?.id) {
@@ -142,7 +143,7 @@ const ManageStudent: React.FC = () => {
   };
 
   const clearState = () => {
-    setStudentState(initialStudentState);
+    // setStudentState(initialStudentState);
     setVisible(false);
   };
 
