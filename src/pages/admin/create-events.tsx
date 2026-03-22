@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, memo } from "react";
 import { TextField, MenuItem } from "@mui/material";
 import { Avatar } from "primereact/avatar";
-import { Drawer, Box, Typography, IconButton } from "@mui/material";
+import { Drawer, Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import CustomButton from "../../components/Button/CustomButton";
 import "../../styles/createEvent/create-event.css";
@@ -50,25 +50,6 @@ const CreateEventForm = memo(
         setEvent((prev) => ({ ...prev, [name]: value }));
       },
       [],
-    );
-
-    const footerContent = () => (
-      <div className="footer-btn">
-        <CustomButton
-          size="small"
-          color="primary"
-          onClick={clearState}
-          type="submit"
-          text={"Cancel"}
-        />
-        <CustomButton
-          size="small"
-          onClick={registerOrUpdateById}
-          color="secondary"
-          type="submit"
-          text={"Register"}
-        />
-      </div>
     );
 
     const headerElement = useMemo(

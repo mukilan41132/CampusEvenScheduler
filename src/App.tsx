@@ -5,7 +5,8 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import MainLayout from "./layouts/MainLayout/MainLayout";
 import { routesConfig } from "./routes/routes";
 import { ThemeContext } from "./context/theme";
-import Error404Wrapper from "./components/Error/404Error";
+import Error404Wrapper from "./Error/404Error";
+import ErrorBoundary from "./Error/ErrorBoundary";
 const AppRoutes: React.FC = () => {
   const { theme } = useContext(ThemeContext);
   useEffect(() => {

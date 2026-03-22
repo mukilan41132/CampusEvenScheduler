@@ -2,6 +2,8 @@ import Dashbord from "../pages/Dashbord/Dashbord";
 import ManageStudent from "../pages/admin/manage-student";
 
 import ManageEvents from "../pages/admin/manage-events";
+import ErrorBoundary from "../Error/ErrorBoundary";
+ 
 
 export interface AppRoute {
   path: string;
@@ -12,15 +14,28 @@ export interface AppRoute {
 export const routesConfig: AppRoute[] = [
   {
     path: "/dashboard",
-    element: <Dashbord />,
+    element: (
+      <ErrorBoundary>
+        <Dashbord />
+      </ErrorBoundary>
+    ),
   },
 
   {
     path: "/manage-events",
-    element: <ManageEvents />,
+    element: (
+      <ErrorBoundary>
+        {" "}
+        <ManageEvents />
+      </ErrorBoundary>
+    ),
   },
   {
     path: "/manage-students",
-    element: <ManageStudent />,
+    element: (
+      <ErrorBoundary>
+        <ManageStudent />
+      </ErrorBoundary>
+    ),
   },
 ];

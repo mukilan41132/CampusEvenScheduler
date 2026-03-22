@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field } from "formik";
 import { loginAuth, type login } from "../../slices/auth/thunk";
 import { validateEmail, validatePassword } from "../../Validation/basic";
-import ErrorMessage from "../../components/Error/ErrorMessage";
+import ErrorMessage from "../../Error/ErrorMessage";
 import "../../styles/Auth/auth.css";
 
 const Authindex = () => {

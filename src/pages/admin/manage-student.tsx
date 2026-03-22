@@ -127,7 +127,7 @@ const ManageStudent: React.FC = () => {
       console.error("Error deleting student:", err);
     }
   };
-  console.log("studentState",studentState);
+  console.log("studentState", studentState);
   const registerOrUpdateById = async () => {
     try {
       if (studentState?.id) {
@@ -168,7 +168,7 @@ const ManageStudent: React.FC = () => {
         </div>
       </div>
       <DynamicTable
-        value={students}
+        value={{ students } as any}
         loading={loading}
         emptyMessage={<NoData message="No Data Found" />}
         columns={columns}
