@@ -1,7 +1,7 @@
 import { type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import error404Img from "../../assets/404_Img.svg";
-import "../../styles/Error/404Error.css";
+import error404Img from "../assets/404_Img.svg";
+import "../styles/Error/404Error.css";
 
 interface Error404WrapperProps {
   children?: ReactNode;

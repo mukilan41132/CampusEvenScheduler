@@ -1,4 +1,4 @@
-import "../../styles/Error/404Error.css";
+import "../styles/Error/404Error.css";
 import Crash from "../assets/404_Img.svg";
 const UiCrash = () => {
   return (
