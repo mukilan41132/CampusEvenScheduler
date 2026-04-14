@@ -4,6 +4,7 @@
     "module": "ESNext",
     "lib": ["DOM", "ESNext"],
         "noEmit": true,   
+    "ignoreDeprecations": "6.0",
     "types": ["node"],
     "moduleResolution": "Node",
     "strict": true,

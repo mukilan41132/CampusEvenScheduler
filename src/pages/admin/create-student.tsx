@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Drawer, Box, Typography, IconButton } from "@mui/material";
+import { Drawer, Box, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Autocomplete from "@mui/material/Autocomplete";
 import { TextField } from "@mui/material";

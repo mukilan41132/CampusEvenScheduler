@@ -25,7 +25,7 @@ export const routesConfig: AppRoute[] = [
     path: "/manage-events",
     element: (
       <ErrorBoundary>
-        {" "}
+   
         <ManageEvents />
       </ErrorBoundary>
     ),

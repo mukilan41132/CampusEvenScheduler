@@ -67,14 +67,17 @@ const ManageEvents: React.FC = () => {
       const res = await HttpAxios.axios().get(
         `ManageEvents/getAllEvents?page=${page}&limit=${limit}`,
       );
-      setEventList(res?.data?.content);
+      console.log(res.data);
+      setEventList(res?.data?.content || []);
       setTotalRecords(res?.data?.totalElements);
     } catch (error) {
+      setEventList([]);
       console.error("Failed to fetch students:", error);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchStudents(0, rows);
   }, []);

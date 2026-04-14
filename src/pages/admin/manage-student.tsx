@@ -36,9 +36,10 @@ const ManageStudent: React.FC = () => {
         `Student/getAll?page=${page}&limit=${limit}`,
       );
 
-      setStudents(res?.data?.content);
+      setStudents(res?.data?.content || []);
       setTotalRecords(res?.data?.totalElements);
     } catch (error) {
+      setStudents([]);
       console.error("Failed to fetch students:", error);
     } finally {
       setLoading(false);
@@ -127,7 +128,7 @@ const ManageStudent: React.FC = () => {
       console.error("Error deleting student:", err);
     }
   };
-  console.log("studentState", studentState);
+
   const registerOrUpdateById = async () => {
     try {
       if (studentState?.id) {
@@ -168,7 +169,7 @@ const ManageStudent: React.FC = () => {
         </div>
       </div>
       <DynamicTable
-        value={{ students } as any}
+        value={students}
         loading={loading}
         emptyMessage={<NoData message="No Data Found" />}
         columns={columns}

@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@mui/material";
-
+import { motion } from "motion/react";
 interface CustomButtonProps {
   text: string;
   onClick?: () => void;
@@ -34,25 +34,22 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   type = "button",
 }) => {
   return (
-    <Button
-      variant={variant}
+    <motion.button
+      whileHover={{ scale: 1.05, y: -2 }}
+      whileTap={{ scale: 0.9, y: 1 }}
       color={color}
-      size={size}
-      startIcon={startIcon}
-      endIcon={endIcon}
-      fullWidth={fullWidth}
-      disabled={disabled}
       type={type}
       onClick={onClick}
-      sx={{
+      style={{
         borderRadius: "8px",
         textTransform: "none",
         fontWeight: 600,
-        px: 3,
+        padding: 5,
+        height:"35px"
       }}
     >
       {text}
-    </Button>
+    </motion.button>
   );
 };
 
