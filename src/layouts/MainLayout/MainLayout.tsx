@@ -25,13 +25,13 @@ const drawerWidth = 240;
 interface MainLayoutProps {
   children: React.ReactNode;
   title?: string;
-  role?: "admin" | "faculty" | "student";
+  role?: "ADMIN" | "faculty" | "STUDENT";
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({
   children,
   title = "Dashboard",
-  role = "student",
+  role,
 }) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -48,11 +48,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({
     dispatch(clearError());
     navigate("/");
   };
-  const menusForRole: RouteMenu[] = routeMenus["admin"] || [];
+  const menusForRole: RouteMenu[] = role ? routeMenus[role] : [];
 
   return (
     <Box>
-      <AppBar position="fixed" sx={{ zIndex: 1201,backgroundColor:"#0f6817" }}>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: 1201, backgroundColor: "#0f6817" }}
+      >
         <Toolbar>
           <IconButton color="inherit" edge="start" onClick={toggleDrawer}>
             <MenuIcon />

@@ -6,9 +6,11 @@ import MainLayout from "./layouts/MainLayout/MainLayout";
 import { routesConfig } from "./routes/routes";
 import { ThemeContext } from "./context/theme";
 import Error404Wrapper from "./Error/404Error";
-import ErrorBoundary from "./Error/ErrorBoundary";
+import { useSelector } from "react-redux";
+
 const AppRoutes: React.FC = () => {
   const { theme } = useContext(ThemeContext);
+  const Authdata = useSelector((state: any) => state.authlogin);
   useEffect(() => {
     if (theme === "dark") {
       document.body.classList.add("dark");
@@ -16,6 +18,7 @@ const AppRoutes: React.FC = () => {
       document.body.classList.remove("dark");
     }
   }, [theme]);
+  console.log("Authdata", Authdata?.auth?.role);
   useEffect(() => {
     const themeLink = document.getElementById("theme-link") as HTMLLinkElement;
 
@@ -35,7 +38,7 @@ const AppRoutes: React.FC = () => {
             key={path}
             path={path}
             element={
-              <MainLayout>
+              <MainLayout role={Authdata?.auth?.role}>
                 <ProtectedRoute>{element}</ProtectedRoute>
               </MainLayout>
             }

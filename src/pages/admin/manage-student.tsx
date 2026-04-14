@@ -15,16 +15,21 @@ import { registerStudent, updateByid } from "../../slices/create-student/thunk";
 import type { AppDispatch } from "../../store/store";
 import { useDispatch } from "react-redux";
 import NoData from "../../components/NORecordFound/NoData";
+import SearchFilter from "../../components/SearchFilter/SearchFilter";
+import { useDebounce } from "../../hooks/useDebounce";
 
 const ManageStudent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const [loading, setLoading] = useState(false);
-  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(false);
   const [students, setStudents] = useState([]);
   const [filters, setFilters] = useState(null);
-  const [first, setFirst] = useState(0);
-  const [rows, setRows] = useState(10);
-  const [totalRecords, setTotalRecords] = useState(0);
+  const [first, setFirst] = useState<number>(0);
+  const [rows, setRows] = useState<number>(10);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [toggle, setToggle] = useState<boolean>(false);
+  const [search, setSearch] = useState<string>("");
+  const debounceSearch = useDebounce(search);
   const [studentState, setStudentState] =
     useState<Student>(initialStudentState);
 
@@ -33,7 +38,7 @@ const ManageStudent: React.FC = () => {
 
     try {
       const res = await HttpAxios.axios().get(
-        `Student/getAll?page=${page}&limit=${limit}`,
+        `Student/getAll?page=${page}&limit=${limit}&search=${debounceSearch}`,
       );
 
       setStudents(res?.data?.content || []);
@@ -48,7 +53,7 @@ const ManageStudent: React.FC = () => {
 
   useEffect(() => {
     fetchStudents(0, rows);
-  }, []);
+  }, [debounceSearch]);
 
   const onPage = (event: any) => {
     const page = event.page;
@@ -144,20 +149,33 @@ const ManageStudent: React.FC = () => {
   };
 
   const clearState = () => {
-    // setStudentState(initialStudentState);
+    setStudentState(initialStudentState);
     setVisible(false);
   };
-
+  const toggleField = () => {
+    setToggle((prev) => !prev);
+    setSearch("");
+  };
   return (
     <div className="card">
       <div className="header-btn">
+        {toggle && (
+          <SearchFilter
+            labelObj={{
+              label1: "Search ..",
+            }}
+            value1={search}
+            onChange1={setSearch}
+          />
+        )}
+
         <div>
           <ActionIcon
             title="Filter"
             icon={<FilterListIcon />}
             color="error"
             sx={{ marginRight: "15px" }}
-            onClick={() => console.log("Filter clicked")}
+            onClick={toggleField}
           />
 
           <CustomButton

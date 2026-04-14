@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { IconButton, Tooltip } from "@mui/material";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -13,6 +12,7 @@ import SearchFilter from "../../components/SearchFilter/SearchFilter";
 import HttpAxios from "../../utils/axiosInstance";
 import ActionColumn from "../../components/ActionBody/actionBodyTemplate";
 import NoData from "../../components/NORecordFound/NoData";
+import ActionIcon from "../../components/Button/ActionIconBtn";
 const initialEvents = {
   id: "",
   eventName: "",
@@ -35,11 +35,11 @@ const ManageEvents: React.FC = () => {
   const popup = useRef<HTMLParagraphElement | null>(null);
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
-  const [first, setFirst] = useState(0);
-  const [rows, setRows] = useState(10);
-  const [loading, setLoading] = useState(false);
-  const [totalRecords, setTotalRecords] = useState(0);
-  const [visible, setVisible] = useState(false);
+  const [first, setFirst] = useState<number>(0);
+  const [rows, setRows] = useState<number>(10);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
+  const [visible, setVisible] = useState<boolean>(false);
   const [filters, setFilters] = useState(null);
   const [findByName, setFindByName] = useState<string>("");
   const [findByDepartment, setFindByDepartment] = useState<string>("");
@@ -184,12 +184,12 @@ const ManageEvents: React.FC = () => {
       <div className="header-btn">
         {toggle && (
           <SearchFilter
-            popup={popup}
             labelObj={{
               label1: "FindByName",
               label2: "FindByDepartment",
               label3: "FindByRollNo",
             }}
+            popup={popup}
             value1={findByName}
             onChange1={setFindByName}
             onChange2={setFindByDepartment}
@@ -200,17 +200,13 @@ const ManageEvents: React.FC = () => {
         )}
 
         <div>
-          <Tooltip title="Delete">
-            <IconButton
-              ref={buttonRef}
-              size="small"
-              sx={{ marginRight: "15px" }}
-              color="error"
-              onClick={() => setToggle((prev) => !prev)}
-            >
-              <FilterListIcon />
-            </IconButton>
-          </Tooltip>
+          <ActionIcon
+            title="Filter"
+            icon={<FilterListIcon />}
+            color="error"
+            sx={{ marginRight: "15px" }}
+            onClick={() => setToggle((prev) => !prev)}
+          />
           <CustomButton
             text={"Create Events"}
             onClick={() => {
