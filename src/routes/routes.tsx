@@ -1,9 +1,10 @@
-import Dashbord from "../pages/Dashbord/Dashbord";
+
 import ManageStudent from "../pages/admin/manage-student";
 
 import ManageEvents from "../pages/admin/manage-events";
 import ErrorBoundary from "../Error/ErrorBoundary";
- 
+import Dashboard from "../pages/Dashbord/Dashbord";
+
 
 export interface AppRoute {
   path: string;
@@ -16,7 +17,7 @@ export const routesConfig: AppRoute[] = [
     path: "/dashboard",
     element: (
       <ErrorBoundary>
-        <Dashbord />
+        <Dashboard />
       </ErrorBoundary>
     ),
   },
@@ -25,7 +26,7 @@ export const routesConfig: AppRoute[] = [
     path: "/manage-events",
     element: (
       <ErrorBoundary>
-   
+
         <ManageEvents />
       </ErrorBoundary>
     ),
