@@ -80,7 +80,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
             <div style={styles.logoSub}>Event Management</div>
           </div>
 
-          <nav style={styles.nav}>
+          <nav style={styles.nav} >
             {menusForRole.map((item, i) => {
               if ("section" in item) {
                 return (
@@ -90,7 +90,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({
                 );
               }
               return (
-                <div key={i} style={{ ...styles.navItem, ...(item.active ? styles.navItemActive : {}) }}>
+                <div key={i} onClick={() => navigate(item.path)} style={{ ...styles.navItem, ...(item.active ? styles.navItemActive : {}) }}>
                   <i className={`ti ti-${item.icon}`} style={styles.navIcon} aria-hidden="true" />
                   <span style={styles.navLabel}>{item.label}</span>
                   {item.badge && (

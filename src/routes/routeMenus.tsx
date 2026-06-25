@@ -36,36 +36,38 @@ export interface NavItem {
   label: string;
   active?: boolean;
   badge?: string;
+  path: string;
 }
 
 export type NavEntry = NavItem | NavSection;
 
 export const navMap: Record<Role, NavEntry[]> = {
   ADMIN: [
-    { icon: "layout-dashboard", label: "Dashboard", active: true },
-    { icon: "calendar-event", label: "All events" },
-    { icon: "clock-check", label: "Approvals", badge: "5" },
+    { icon: "layout-dashboard", label: "Dashboard", path: "/dashboard", active: true },
+    { icon: "calendar-event", label: "All events", path: "/manage-events" },
+    { icon: "clock-check", label: "Approvals", path: "/admin/approvals", badge: "5" },
     { section: "Manage" },
-    { icon: "users", label: "Users" },
-    { icon: "building", label: "Departments" },
-    { icon: "chart-bar", label: "Analytics" },
-    { icon: "settings", label: "Settings" },
+    { icon: "users", label: "Users", path: "/admin/users" },
+    { icon: "students", label: "Students", path: "/manage-students" },
+    { icon: "building", label: "Departments", path: "/admin/departments" },
+    { icon: "chart-bar", label: "Analytics", path: "/admin/analytics" },
+    { icon: "settings", label: "Settings", path: "/admin/settings" },
   ],
   faculty: [
-    { icon: "layout-dashboard", label: "Dashboard", active: true },
-    { icon: "calendar-event", label: "My events" },
-    { icon: "plus", label: "Create event" },
+    { icon: "layout-dashboard", label: "Dashboard", path: "/faculty/dashboard", active: true },
+    { icon: "calendar-event", label: "My events", path: "/faculty/events" },
+    { icon: "plus", label: "Create event", path: "/faculty/events/create" },
     { section: "Tools" },
-    { icon: "users", label: "Registrations" },
-    { icon: "bell", label: "Notifications" },
+    { icon: "users", label: "Registrations", path: "/faculty/registrations" },
+    { icon: "bell", label: "Notifications", path: "/faculty/notifications" },
   ],
   STUDENT: [
-    { icon: "layout-dashboard", label: "Dashboard", active: true },
-    { icon: "calendar-event", label: "Browse events" },
-    { icon: "bookmark", label: "My registrations" },
+    { icon: "layout-dashboard", label: "Dashboard", path: "/student/dashboard", active: true },
+    { icon: "calendar-event", label: "Browse events", path: "/student/events" },
+    { icon: "bookmark", label: "My registrations", path: "/student/registrations" },
     { section: "Other" },
-    { icon: "bell", label: "Reminders" },
-    { icon: "user", label: "Profile" },
+    { icon: "bell", label: "Reminders", path: "/student/reminders" },
+    { icon: "user", label: "Profile", path: "/student/profile" },
   ],
 };
 
