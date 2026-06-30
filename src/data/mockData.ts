@@ -1,11 +1,11 @@
-import type { User,Event, ApprovalItem, ActivityItem } from "../Types";
+import type { User, Event, ApprovalItem, ActivityItem } from "../Types";
 
- 
+
 
 export const users: Record<string, User> = {
-  admin: { name: "Priya Anand", initials: "PA", role: "admin" },
+  admin: { name: "Priya Anand", initials: "PA", role: "ADMIN" },
   faculty: { name: "Dr. Ramesh Kumar", initials: "RK", role: "faculty" },
-  student: { name: "Arjun Verma", initials: "AV", role: "student" },
+  student: { name: "Arjun Verma", initials: "AV", role: "STUDENT" },
 };
 
 export const events: Event[] = [
