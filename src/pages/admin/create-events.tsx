@@ -27,7 +27,7 @@ export interface EventFormData {
   endTime: string;
   venue: string;
   department: string;
-  organizerName: string;
+  organizationName: string;
   contactEmail: string;
   contactNumber: string;
   maxParticipants: string;
@@ -193,9 +193,9 @@ const CreateEventForm = memo(
 
               <TextField
                 label="Organizer Name"
-                name="organizerName"
+                name="organizationName"
                 size="small"
-                value={event.organizerName}
+                value={event.organizationName}
                 onChange={handleChange}
                 fullWidth
                 className="form-control"
