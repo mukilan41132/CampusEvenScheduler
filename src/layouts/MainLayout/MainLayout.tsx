@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 
 import MenuIcon from "@mui/icons-material/Menu";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import routeMenus, { navMap, type RouteMenu } from "../../routes/routeMenus";
-import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { navMap } from "../../routes/routeMenus";
+import { useDispatch } from "react-redux";
 import type { AppDispatch } from "../../store/store";
 import { clearError } from "../../slices/auth/authSlice";
 import { ThemeContext } from "../../context/theme";
@@ -17,7 +17,7 @@ import Button from "@mui/material/Button";
 import Drawer from "@mui/material/Drawer";
 
 
-const drawerWidth = 240;
+
 
 interface MainLayoutProps {
   children: React.ReactNode;
@@ -27,7 +27,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({
   children,
-  title = "Dashboard",
+
   role,
 }) => {
   const location = useLocation();

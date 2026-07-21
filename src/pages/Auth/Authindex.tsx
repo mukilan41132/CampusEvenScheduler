@@ -15,7 +15,7 @@ const Authindex = () => {
   const dispatch = useDispatch<AppDispatch>();
   const Authdata = useSelector((state: any) => state.authlogin);
   const [error, setError] = useState<string | null>("");
-
+  const [loading, setLoading] = useState<boolean>(false);
   useEffect(() => {
     if (!error) return;
 
@@ -45,6 +45,7 @@ const Authindex = () => {
           email: "",
         }}
         onSubmit={async (values) => {
+          setLoading(true)
           setError("");
 
           try {
@@ -58,6 +59,9 @@ const Authindex = () => {
             navigate("/dashboard");
           } catch (err: any) {
             setError(err || "Invalid email or password");
+
+          } finally {
+            setLoading(false)
           }
         }}
       >
@@ -88,7 +92,16 @@ const Authindex = () => {
             {touched.password && errors.password && (
               <ErrorMessage message={errors.password} />
             )}
-            <button type="submit">{"Sign In"}</button>
+            <button type="submit" disabled={loading} className="submit-btn">
+              {loading ? (
+                <>
+                  <span className="spinner" />
+                  Signing In...
+                </>
+              ) : (
+                "Sign In"
+              )}
+            </button>
             <p className="divider">or continue with</p>
             <div className="social-buttons">
               <button type="button">Google</button>

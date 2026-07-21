@@ -38,7 +38,7 @@ export interface EventFormData {
 const CreateEventForm = memo(
   ({
     visible,
-    setVisible,
+ 
     setEvent,
     event,
     clearState,
