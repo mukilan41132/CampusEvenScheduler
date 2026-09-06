@@ -28,14 +28,14 @@ const Authindex = () => {
 
   useEffect(() => {
     if (!Authdata) return;
-
-    if (Authdata?.auth?.token) {
-      sessionStorage.setItem("token", Authdata.auth.token);
-      navigate("/dashboard", { replace: true });
-    } else {
-      navigate("/", { replace: true });
-    }
-  }, [Authdata?.auth?.token, navigate]);
+   navigate("/dashboard", { replace: true });
+    // if (Authdata?.auth?.token) {
+    //   sessionStorage.setItem("token", Authdata.auth.token);
+   
+    // } else {
+    //   navigate("/", { replace: true });
+    // }
+  }, [  navigate]);
 
   return (
     <div className="login-container">

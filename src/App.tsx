@@ -7,6 +7,7 @@ import { routesConfig } from "./routes/routes";
 import { ThemeContext } from "./context/theme";
 import Error404Wrapper from "./Error/404Error";
 import { useSelector } from "react-redux";
+import Dashbord from "./pages/Dashbord/Dashbord";
 
 const AppRoutes: React.FC = () => {
   const { theme } = useContext(ThemeContext);
@@ -31,7 +32,7 @@ const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Authindex />} />
+        <Route path="/dashboard" element={<Dashbord />} />
 
         {routesConfig.map(({ path, element }) => (
           <Route
@@ -39,7 +40,7 @@ const AppRoutes: React.FC = () => {
             path={path}
             element={
               <MainLayout role={Authdata?.auth?.role}>
-                <ProtectedRoute>{element}</ProtectedRoute>
+               {element}
               </MainLayout>
             }
           />
