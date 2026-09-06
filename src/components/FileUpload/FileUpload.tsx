@@ -37,7 +37,7 @@ const FileUpload = ({ name, value, stateSetter }: FileUploadProps) => {
 
   const imageSrc =
     preview || (value ? `${API_URL}${value}` : placeHolderProfile);
-  console.log("preview", preview);
+ 
   return (
     <div>
       <div onClick={handleProfileChange}>

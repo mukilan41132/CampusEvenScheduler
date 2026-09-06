@@ -10,7 +10,7 @@ export interface EventFormData {
   endTime: string;
   venue: string;
   department: string;
-  organizerName: string;
+  organizationName: string;
   contactEmail: string;
   contactNumber: string;
   maxParticipants: string;

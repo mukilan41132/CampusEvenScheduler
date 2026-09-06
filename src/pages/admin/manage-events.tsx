@@ -23,7 +23,7 @@ const initialEvents = {
   endTime: "",
   venue: "",
   department: "",
-  organizerName: "",
+  organizationName: "",
   contactEmail: "",
   contactNumber: "",
   maxParticipants: "",
@@ -99,7 +99,7 @@ const ManageEvents: React.FC = () => {
       style: { minWidth: "12rem" },
     },
     {
-      field: "email",
+      field: "contactEmail",
       header: "Email",
       filter: true,
       filterPlaceholder: "Search by email",
@@ -115,7 +115,7 @@ const ManageEvents: React.FC = () => {
       header: "EventType",
       style: { minWidth: "6rem" },
     },
-    {
+    { 
       field: "venue",
       header: "Venue",
       filter: true,

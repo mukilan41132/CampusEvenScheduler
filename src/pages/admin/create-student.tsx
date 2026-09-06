@@ -24,7 +24,7 @@ export interface Student {
 }
 interface CreateStudentProps {
   visible: boolean;
-  registerOrUpdateById: () => Promise<void>;
+  onSubmit: () => void;
   clearState: () => void;
   studentState: Student;
   setStudentState: React.Dispatch<React.SetStateAction<Student>>;
@@ -103,7 +103,7 @@ const CreateStudent = memo(
     visible,
     studentState,
     setStudentState,
-    registerOrUpdateById,
+    onSubmit,
     clearState,
   }: CreateStudentProps) => {
     const stateSetter = (name: string, value: any) => {
@@ -280,7 +280,7 @@ const CreateStudent = memo(
                 />
                 <CustomButton
                   size="small"
-                  onClick={registerOrUpdateById}
+                  onClick={onSubmit}
                   color="secondary"
                   text={studentState?.id ? "Update" : "Register"}
                 />

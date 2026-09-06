@@ -3,10 +3,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import HttpAxios from "../../utils/axiosInstance";
 import CustomButton from "../../components/Button/CustomButton";
-import CreateStudent, {
-  initialStudentState,
-  type Student,
-} from "./create-student";
+ 
 import FilterListIcon from "@mui/icons-material/FilterList";
 import DynamicTable from "../../components/Table/DynamicTable";
 import ActionIcon from "../../components/Button/ActionIconBtn";
@@ -17,6 +14,7 @@ import { useDispatch } from "react-redux";
 import NoData from "../../components/NORecordFound/NoData";
 import SearchFilter from "../../components/SearchFilter/SearchFilter";
 import { useDebounce } from "../../hooks/useDebounce";
+import CreateStudent, { initialStudentState, type Student } from "./create-student";
 
 const ManageStudent: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -203,7 +201,7 @@ const ManageStudent: React.FC = () => {
       <CreateStudent
         visible={visible}
         studentState={studentState}
-        registerOrUpdateById={registerOrUpdateById}
+        onSubmit={registerOrUpdateById}
         clearState={clearState}
         setStudentState={setStudentState}
       />
