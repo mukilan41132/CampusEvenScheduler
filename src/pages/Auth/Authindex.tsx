@@ -7,7 +7,9 @@ import { Formik, Form, Field } from "formik";
 import { loginAuth, type login } from "../../slices/auth/thunk";
 import { validateEmail, validatePassword } from "../../Validation/basic";
 import ErrorMessage from "../../Error/ErrorMessage";
-import "../../styles/Auth/auth.css";
+import "../../styles/Auth/Register.css";
+import { socialAuth } from "../../slices/auth/socialAuth";
+import { useGoogleLogin } from "@react-oauth/google";
 
 const Authindex = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -28,14 +30,29 @@ const Authindex = () => {
 
   useEffect(() => {
     if (!Authdata) return;
-   navigate("/dashboard", { replace: true });
-    // if (Authdata?.auth?.token) {
-    //   sessionStorage.setItem("token", Authdata.auth.token);
-   
-    // } else {
-    //   navigate("/", { replace: true });
-    // }
-  }, [  navigate]);
+    navigate("/dashboard", { replace: true });
+    if (Authdata?.auth?.token) {
+      sessionStorage.setItem("token", Authdata.auth.token);
+    } else {
+      navigate("/", { replace: true });
+    }
+  }, [navigate]);
+  const googleLogin = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async ({ code }) => {
+      setError("");
+      try {
+        const data = await dispatch(
+          socialAuth({ provider: "google", code }),
+        ).unwrap();
+        console.log("data", data);
+        sessionStorage.setItem("token", data.token);
+      } catch (err) {
+        setError(typeof err === "string" ? err : "Google sign-in failed");
+      }
+    },
+    onError: () => setError("Google sign-in was cancelled"),
+  });
 
   return (
     <div className="login-container">
@@ -45,7 +62,7 @@ const Authindex = () => {
           email: "",
         }}
         onSubmit={async (values) => {
-          setLoading(true)
+          setLoading(true);
           setError("");
 
           try {
@@ -59,9 +76,8 @@ const Authindex = () => {
             navigate("/dashboard");
           } catch (err: any) {
             setError(err || "Invalid email or password");
-
           } finally {
-            setLoading(false)
+            setLoading(false);
           }
         }}
       >
@@ -104,13 +120,19 @@ const Authindex = () => {
             </button>
             <p className="divider">or continue with</p>
             <div className="social-buttons">
-              <button type="button">Google</button>
-              <button type="button">GitHub</button>
-              <button type="button">Facebook</button>
+              <button type="button" onClick={() => googleLogin()}>
+                Google
+              </button>
+              <button type="button" disabled title="Coming soon">
+                GitHub
+              </button>
+              <button type="button" disabled title="Coming soon">
+                Facebook
+              </button>
             </div>
             <p className="register">
               I don't have an account?{" "}
-              <a href="/auth/register">Register for free</a>
+              <a href="/register-newuser">Register for free</a>
             </p>
           </Form>
         )}

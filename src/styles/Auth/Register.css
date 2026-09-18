@@ -1,0 +1,320 @@
+:root {
+  --auth-bg: #f5f6f8;
+  --auth-surface: #ffffff;
+  --auth-text: #1c2433;
+  --auth-muted: #66708a;
+  --auth-border: #d8dce6;
+  --auth-accent: #2f5bea;
+  --auth-accent-dark: #234ac4;
+  --auth-danger: #c33d3d;
+  --auth-radius: 12px;
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url("./../../assets/scattered-forcefields.svg") #f5f6fa;
+}
+
+/* Page shell ------------------------------------------------------------- */
+
+.auth-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vw, 3rem);
+  background: var(--auth-bg);
+  color: var(--auth-text);
+}
+
+/* Form card -------------------------------------------------------------- */
+
+.login-form,
+.register-form {
+  width: 100%;
+  max-width: 26rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: clamp(1.25rem, 5vw, 2.25rem);
+  background: var(--auth-surface);
+  border: 1px solid var(--auth-border);
+  border-radius: var(--auth-radius);
+  box-shadow: 0 12px 32px rgba(20, 30, 60, 0.07);
+}
+
+.login-form h2,
+.register-form h2 {
+  margin: 0 0 1rem;
+  font-size: clamp(1.4rem, 4vw, 1.75rem);
+  line-height: 1.2;
+  font-weight: 650;
+}
+
+/* Fields ----------------------------------------------------------------- */
+
+.login-form label,
+.register-form label {
+  margin-top: 0.6rem;
+  font-size: 0.875rem;
+  font-weight: 550;
+  color: var(--auth-muted);
+}
+
+.login-form input,
+.register-form input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.7rem 0.85rem;
+  font-size: 1rem; /* 16px keeps iOS Safari from zooming on focus */
+  font-family: inherit;
+  color: inherit;
+  background: var(--auth-surface);
+  border: 1px solid var(--auth-border);
+  border-radius: 8px;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.login-form input:focus-visible,
+.register-form input:focus-visible {
+  outline: none;
+  border-color: var(--auth-accent);
+  box-shadow: 0 0 0 3px rgba(47, 91, 234, 0.18);
+}
+
+/* Two fields side by side, stacked on small screens */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* lets inputs shrink inside the grid */
+}
+
+.form-field label {
+  margin-top: 0.6rem;
+}
+
+.field-hint {
+  margin: 0.3rem 0 0;
+  font-size: 0.78rem;
+  color: var(--auth-muted);
+}
+
+/* Password toggle -------------------------------------------------------- */
+
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-wrapper input {
+  padding-right: 2.75rem;
+}
+
+.toggle-eye {
+  position: absolute;
+  right: 0.25rem;
+  display: grid;
+  place-items: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  color: var(--auth-muted);
+  background: none;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.toggle-eye:hover {
+  color: var(--auth-text);
+}
+
+.toggle-eye:focus-visible {
+  outline: 2px solid var(--auth-accent);
+  outline-offset: 2px;
+}
+
+/* Terms checkbox --------------------------------------------------------- */
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  color: var(--auth-text);
+  cursor: pointer;
+}
+
+.checkbox-row input {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+  flex: none;
+  accent-color: var(--auth-accent);
+}
+
+/* Buttons ---------------------------------------------------------------- */
+
+.submit-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1.25rem;
+  padding: 0.8rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  background: var(--auth-accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.submit-btn:hover:not(:disabled) {
+  background: var(--auth-accent-dark);
+}
+
+.submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 1rem;
+  height: 1rem;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: auth-spin 0.7s linear infinite;
+}
+
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Divider + social ------------------------------------------------------- */
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.25rem 0 0.9rem;
+  font-size: 0.8rem;
+  color: var(--auth-muted);
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--auth-border);
+}
+
+.social-buttons {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.social-buttons button {
+  padding: 0.65rem 0.5rem;
+  font: inherit;
+  font-size: 0.875rem;
+  color: var(--auth-text);
+  background: var(--auth-surface);
+  border: 1px solid var(--auth-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.social-buttons button:hover {
+  background: #f1f3f8;
+  border-color: #c3c9d8;
+}
+
+.social-buttons button:focus-visible,
+.submit-btn:focus-visible {
+  outline: 2px solid var(--auth-accent);
+  outline-offset: 2px;
+}
+
+/* Footer link ------------------------------------------------------------ */
+
+.register {
+  margin: 1.25rem 0 0;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--auth-muted);
+}
+
+.register a,
+.checkbox-row a {
+  color: var(--auth-accent);
+  font-weight: 550;
+}
+
+/* Responsive ------------------------------------------------------------- */
+
+@media (max-width: 30rem) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .social-buttons {
+    grid-template-columns: 1fr;
+  }
+
+  .login-form,
+  .register-form {
+    border: none;
+    box-shadow: none;
+    background: transparent;
+  }
+
+  .auth-page {
+    align-items: flex-start;
+    background: var(--auth-surface);
+    padding-top: 2rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .register-form {
+    max-width: 30rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation-duration: 2s;
+  }
+
+  .login-form *,
+  .register-form * {
+    transition: none !important;
+  }
+}

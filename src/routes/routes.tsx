@@ -1,10 +1,10 @@
-
 import ManageStudent from "../pages/admin/manage-student";
 
 import ManageEvents from "../pages/admin/manage-events";
 import ErrorBoundary from "../Error/ErrorBoundary";
 import Dashboard from "../pages/Dashbord/Dashbord";
-
+import Registerindex from "../pages/Auth/Register";
+import Authindex from "../pages/Auth/Authindex";
 
 export interface AppRoute {
   path: string;
@@ -26,7 +26,6 @@ export const routesConfig: AppRoute[] = [
     path: "/manage-events",
     element: (
       <ErrorBoundary>
-
         <ManageEvents />
       </ErrorBoundary>
     ),
@@ -36,6 +35,25 @@ export const routesConfig: AppRoute[] = [
     element: (
       <ErrorBoundary>
         <ManageStudent />
+      </ErrorBoundary>
+    ),
+  },
+];
+
+export const publicRoutes = [
+  {
+    path: "/register-newuser",
+    element: (
+      <ErrorBoundary>
+        <Registerindex />
+      </ErrorBoundary>
+    ),
+  },
+  {
+    path: "/login",
+    element: (
+      <ErrorBoundary>
+        <Authindex />
       </ErrorBoundary>
     ),
   },

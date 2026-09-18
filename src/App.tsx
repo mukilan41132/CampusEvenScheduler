@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Authindex from "./pages/Auth/Authindex";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MainLayout from "./layouts/MainLayout/MainLayout";
-import { routesConfig } from "./routes/routes";
+import { publicRoutes, routesConfig } from "./routes/routes";
 import { ThemeContext } from "./context/theme";
 import Error404Wrapper from "./Error/404Error";
 import { useSelector } from "react-redux";
@@ -20,6 +20,7 @@ const AppRoutes: React.FC = () => {
     }
   }, [theme]);
   console.log("Authdata", Authdata?.auth?.role);
+  console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID);
   useEffect(() => {
     const themeLink = document.getElementById("theme-link") as HTMLLinkElement;
 
@@ -32,16 +33,16 @@ const AppRoutes: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/dashboard" element={<Dashbord />} />
+        <Route path="/" element={<Authindex />} />
 
         {routesConfig.map(({ path, element }) => (
           <Route
             key={path}
             path={path}
             element={
-              <MainLayout role={Authdata?.auth?.role}>
-               {element}
-              </MainLayout>
+              <ProtectedRoute>
+                <MainLayout role={Authdata?.auth?.role}>{element}</MainLayout>
+              </ProtectedRoute>
             }
           />
         ))}
